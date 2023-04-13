@@ -39,7 +39,7 @@ function MainPage(props){
                                 <button style={{float: 'right'}}onClick={()=> props.updateLogin(false)}>Log Out</button>
                         </div>
                         {MessageData}
-                        <span><button className="btn btn-primary">Send Message</button></span><span style={{display:'block'}}><input></input></span>
+                        <div><button className="btn btn-primary">Send Message</button><input style={{width:"100%"}}></input></div>
                     </div>
                     
                     
