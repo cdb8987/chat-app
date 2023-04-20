@@ -1,9 +1,15 @@
 
-from flask import Flask, send_from_directory, send_file, jsonify, request, make_response
+from flask import Flask, send_from_directory, send_file, jsonify, request, make_response, jsonify
 from flask import request
 import datetime
 import jwt
 from functools import wraps
+import psycopg2
+from flask_restful import Api, Resource, reqparse
+from flask import request
+import requests
+import datetime
+from datetime import date
 
 
 app = Flask(__name__, static_folder='C:/Users/Charlie (Personal)/Desktop/SDMM/Modules/Module 11/chat-app/chat-app-front-end/build',
@@ -33,11 +39,12 @@ dummyMessageData = [
      }
 ]
 
+
 def token_required(f):
     @wraps(f)
     def decorated(*args, **kwargs):
         token = request.args.get('token')
-        
+
         if not token:
             return jsonify({'message': 'missing access token'}), 403
 
@@ -50,13 +57,14 @@ def token_required(f):
         return f(*args, **kwargs)
     return decorated
 
+
 @app.route('/login')
 def login():
     auth = request.authorization
     if auth and auth.password == 'password':
         token = jwt.encode(
-            {'user': auth.username, 'exp': datetime.datetime.utcnow()+datetime.timedelta(minutes=30)}, app.config['SECRET_KEY']) 
-    
+            {'user': auth.username, 'exp': datetime.datetime.utcnow()+datetime.timedelta(minutes=30)}, app.config['SECRET_KEY'])
+
         return jsonify({'token': token})
 
     return make_response('Could not Verify', 401, {'WWW-Authenticate': 'Basic realm="login required"'})
@@ -96,4 +104,60 @@ def hello_world():
     return "Return single user function executed"
 
 
-app.run()
+# THIS DATABASE FUNCTION NEEDS TO BE ATTACHED TO A ROUTE
+@token_required
+def access_database():
+
+    try:
+        username = request.args.get('username')
+
+    except:
+        print('Request object did not contain a username argument')
+        username = 'emptyuser'
+    try:
+        messagetext = request.args.get('messagetext')
+
+    except:
+        print('Request object did not contain a username argument')
+        messagetext = 'emptymessage'
+    createddate = datetime.date.today()
+
+    conn = psycopg2.connect(
+        host="localhost",
+        database="chat_app",
+        user='charlie',
+        password='password')
+
+    cur = conn.cursor()
+
+    def add_message(cur, conn, username, messagetext, createddate):
+        cur.execute('INSERT INTO messages (userid, messagetext, createddate)'
+                    'VALUES (%s, %s, %s)',
+                    (
+                        3,
+                        f'{messagetext}, sincerely... {username}',
+                        createddate)
+                    )
+        conn.commit()
+
+        cur.close()
+        conn.close()
+        return jsonify({'response': f'message ({messagetext}) added to database'})
+
+    # def add_user(cur, conn, username)
+
+    def retrieve_messages(cur, conn):
+        cur.execute('SELECT * FROM messages')
+        messages = cur.fetchall()
+        conn.commit()
+
+        cur.close()
+        conn.close()
+        return jsonify(messages)
+
+    return retrieve_messages(cur, conn)
+
+    # return add_message(cur, conn, username, messagetext, createddate)
+
+
+app.run(debug=True)
