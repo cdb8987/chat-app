@@ -7,13 +7,15 @@ from functools import wraps
 import psycopg2
 from flask_restful import Api, Resource, reqparse
 from flask import request
-import requests
+# import requests
 import datetime
 from datetime import date
+# from flask_cors import CORS
 
 
-app = Flask(__name__, static_folder='C:/Users/Charlie (Personal)/Desktop/SDMM/Modules/Module 11/chat-app/chat-app-front-end/build',
+app = Flask(__name__, static_folder='C:/Users/Charlie (Personal)/Desktop/SDMM/Modules/Module 11/chat-app/chat-app-front-end/build2',
             static_url_path='/')
+# CORS(app)
 app.config['SECRET_KEY'] = "thisisthesecretkey"
 
 dummyMessageData = [
@@ -61,7 +63,7 @@ def token_required(f):
 @app.route('/login')
 def login():
     auth = request.authorization
-    if auth and auth.password == 'password':
+    if auth and auth.password == 'Password':
         token = jwt.encode(
             {'user': auth.username, 'exp': datetime.datetime.utcnow()+datetime.timedelta(minutes=30)}, app.config['SECRET_KEY'])
 
@@ -73,7 +75,7 @@ def login():
 @app.route("/")
 @token_required
 def index():
-    return send_from_directory('C:/Users/Charlie (Personal)/Desktop/SDMM/Modules/Module 11/chat-app/chat-app-front-end/build', 'index.html')
+    return send_from_directory('C:/Users/Charlie (Personal)/Desktop/SDMM/Modules/Module 11/chat-app/chat-app-front-end/build2', 'index.html')
 
 
 @app.get("/messages")
@@ -83,10 +85,11 @@ def retrieve_messages():
 
 @app.post("/messages")
 def write_message():
+
     # newMessage = request.args['user']
     # dummyMessageData.append(newMessage)
     # print(request.headers)
-    return
+    return jsonify({'message': 'you have reached the write_message endpoint'})
 
 
 @app.get("/users")
