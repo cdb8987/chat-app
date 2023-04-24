@@ -27,8 +27,7 @@ function App() {
   return (
     <div>
 
-      <LoginPage updatelogin={setLoginStatus}/>
-       
+      <LoginPage updatelogin={setLoginStatus}/>       
        
     </div>
     
