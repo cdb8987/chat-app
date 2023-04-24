@@ -49,6 +49,25 @@ def access_database(db_request):
         conn.close()
         return jsonify({'response': f'message ({username}, {password}) added to database'})
 
+    def retrieve_username_password_pair(cur, conn, username, password):
+        cur.execute('SELECT * FROM users WHERE username = %s', [username])
+        try:
+            row = cur.fetchone()
+            valid_password = row[3]
+            print('valid password is: ', valid_password)
+            conn.commit()
+            cur.close()
+            conn.close()
+            print(password == valid_password, password, valid_password)
+            if password == valid_password:
+                return True
+            else:
+                return False
+
+        except TypeError:
+            print('USERNAME NOT FOUND')
+            return False
+
     def retrieve_messages(cur, conn):
         cur.execute('SELECT * FROM messages')
         messages = cur.fetchall()
@@ -63,3 +82,6 @@ def access_database(db_request):
     if db_request['request_type'] == 'add_user':
         add_user(cur, conn, db_request['username'],
                  createddate, db_request['password'])
+    if db_request['request_type'] == 'retrieve_username_password_pair':
+        return retrieve_username_password_pair(
+            cur, conn, db_request['username'], db_request['password'])

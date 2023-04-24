@@ -5,18 +5,14 @@ import datetime
 import jwt
 from flask_jwt_extended import create_access_token
 from functools import wraps
-import psycopg2
 from flask_restful import Api, Resource, reqparse
 from flask import request
-# import requests
-import datetime
-from datetime import date
-from flask_cors import CORS
+import database_functions
 
 
-app = Flask(__name__, static_folder='C:/Users/Charlie (Personal)/Desktop/SDMM/Modules/Module 11/chat-app/chat-app-front-end/build2',
+app = Flask(__name__, static_folder='C:/Users/Charlie (Personal)/Desktop/SDMM/Modules/Module 11/chat-app/chat-app-front-end/build',
             static_url_path='/')
-CORS(app)
+
 app.config['SECRET_KEY'] = "thisisthesecretkey"
 
 dummyMessageData = [
@@ -61,29 +57,39 @@ def token_required(f):
     return decorated
 
 
-@app.route('/login')
+@app.post('/login')
 def login():
-    auth = request.authorization
-    if auth and auth.password == 'Password':
-        access_token = jwt.encode(
-            {'user': auth.username, 'exp': datetime.datetime.utcnow()+datetime.timedelta(minutes=30)}, app.config['SECRET_KEY'])
 
-        # return jsonify({'token': token})
+    submitted_username = request.headers.get('Username')
+    submitted_password = request.headers.get('Password')
+
+    db_request = {'request_type': 'retrieve_username_password_pair',
+                  'username': submitted_username, 'password': submitted_password}
+    print('server function evaluates to:',
+          database_functions.access_database(db_request))
+
+    if database_functions.access_database(db_request):
+
+        access_token = jwt.encode(
+            {'user': request.headers.get('Username'), 'exp': datetime.datetime.utcnow()+datetime.timedelta(minutes=30)}, app.config['SECRET_KEY'])
+        print("\npassword matched!!\n TOKEN GENERATED: \n", access_token)
+
         response = jsonify({'login': True})
         response.set_cookie('access_token', access_token,
                             httponly=True)  # Set HttpOnly to True
+        print(request.headers.get('username'), request.headers.get('Password'))
         return response, 200
-
+    print('\npassword did NOT match!!\n')
     return make_response('Could not Verify', 401, {'WWW-Authenticate': 'Basic realm="login required"'})
 
 
 @app.route("/")
-@token_required
 def index():
-    return send_from_directory('C:/Users/Charlie (Personal)/Desktop/SDMM/Modules/Module 11/chat-app/chat-app-front-end/build2', 'index.html')
+    return send_from_directory('C:/Users/Charlie (Personal)/Desktop/SDMM/Modules/Module 11/chat-app/chat-app-front-end/build', 'index.html')
 
 
 @app.get("/messages")
+@token_required
 def retrieve_messages():
     return [f'There are currently {len(dummyMessageData)} messages.  ', dummyMessageData]
 
@@ -98,74 +104,28 @@ def write_message():
 
 
 @app.get("/users")
+@token_required
 def retrieve_users():
+
     return '<p>Get Users Function Executed</p>'
 
 
 @app.post("/users")
 def create_user():
+    new_username = request.headers.get('Username')
+    new_password = request.headers.get('Password')
+    print("This profile will be added to the user database:  \n",
+          new_username, new_password)
+    db_request = {'request_type': 'add_user', 'username': new_username,
+                  'password': new_password, 'message_text': None}
+    database_functions.access_database(db_request)
+
     return '<p>Create User function executed.</p>'
 
 
 @app.route("/users")
 def hello_world():
     return "Return single user function executed"
-
-
-# THIS DATABASE FUNCTION NEEDS TO BE ATTACHED TO A ROUTE
-@token_required
-def access_database():
-
-    try:
-        username = request.args.get('username')
-
-    except:
-        print('Request object did not contain a username argument')
-        username = 'emptyuser'
-    try:
-        messagetext = request.args.get('messagetext')
-
-    except:
-        print('Request object did not contain a username argument')
-        messagetext = 'emptymessage'
-    createddate = datetime.date.today()
-
-    conn = psycopg2.connect(
-        host="localhost",
-        database="chat_app",
-        user='charlie',
-        password='password')
-
-    cur = conn.cursor()
-
-    def add_message(cur, conn, username, messagetext, createddate):
-        cur.execute('INSERT INTO messages (userid, messagetext, createddate)'
-                    'VALUES (%s, %s, %s)',
-                    (
-                        3,
-                        f'{messagetext}, sincerely... {username}',
-                        createddate)
-                    )
-        conn.commit()
-
-        cur.close()
-        conn.close()
-        return jsonify({'response': f'message ({messagetext}) added to database'})
-
-    # def add_user(cur, conn, username)
-
-    def retrieve_messages(cur, conn):
-        cur.execute('SELECT * FROM messages')
-        messages = cur.fetchall()
-        conn.commit()
-
-        cur.close()
-        conn.close()
-        return jsonify(messages)
-
-    return retrieve_messages(cur, conn)
-
-    # return add_message(cur, conn, username, messagetext, createddate)
 
 
 app.run(debug=True)
