@@ -18,14 +18,17 @@ def access_database(db_request):
 
     cur = conn.cursor()
 
+
+# def disconnect_from_database(cur, conn):
+#     conn.commit()
+#     cur.close()
+#     conn.close()
+
     def add_message(cur, conn, username, messagetext, createddate):
         cur.execute('INSERT INTO messages (userid, messagetext, createddate)'
                     'VALUES (%s, %s, %s)',
-                    (
-                        3,
-                        f'{messagetext}, sincerely... {username}',
-                        createddate)
-                    )
+                    (f"(SELECT {username} from users where username = 'Batman')", messagetext, createddate))
+
         conn.commit()
 
         cur.close()
@@ -85,3 +88,6 @@ def access_database(db_request):
     if db_request['request_type'] == 'retrieve_username_password_pair':
         return retrieve_username_password_pair(
             cur, conn, db_request['username'], db_request['password'])
+    if db_request['request_type'] == 'write_message':
+        add_message(cur, conn, db_request['username'],
+                    db_request['messagetext'], createddate)
