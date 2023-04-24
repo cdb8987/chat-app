@@ -17,6 +17,18 @@ let loggedIn = false
 
 function App() {
   let [logInStatus, setLoginStatus] = useState(loggedIn)
+
+  // const generateHeaders = (username, password, messagetext = false)=>{
+  //   const myHeaders = new Headers();
+  //   myHeaders.append("username", username)
+  //   myHeaders.append("password", password);
+  //   myHeaders.append("Authorization", "Basic Q2hhcmxpZTpQYXNzd29yZA==");
+  //   if(messagetext){myHeaders.append("messagetext", messagetext);}
+  //   return myHeaders
+  // }
+
+
+
   
   if(logInStatus === true){
     return (
@@ -27,7 +39,7 @@ function App() {
   return (
     <div>
 
-      <LoginPage updatelogin={setLoginStatus}/>
+      <LoginPage updatelogin={setLoginStatus} />
        
        
     </div>

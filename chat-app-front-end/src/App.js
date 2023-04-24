@@ -9,30 +9,10 @@ import 'bootstrap/dist/js/bootstrap.min.js';
 import { useState } from 'react';
 
 
-let Token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjoiY2hhcmxpZSIsImV4cCI6MTY4MjA4NzUzOH0.uZ-vFdSQy-k3TY9uNX032-4-RHQuHI0y0San0nmGLBs';
 
-const requestobject = {method: 'GET', headers: {'Accept': 'application/json', 'Content-Type': 'application/json',      'password': 'Password',
-'Authorization': 'Basic Y2hhcmxpZTpQYXNzd29yZA=='}, body: null};
 
-const getRequest = (endpointURL, requestobject)=>{
-  return (
-    fetch(endpointURL, requestobject)
-    .then(response => response.json())
-    .then(response => console.log(JSON.stringify(response)))
-    .catch(error=>console.log(error.message))
-  )
-}
 
-const postRequest = (endpointURL, requestobject)=>{
-  return (
-    fetch(endpointURL, requestobject)
-    .then(response => response.json())
-    .then(response => console.log(JSON.stringify(response)))
-    .catch(error=>console.log(error.message))
-  )
-}
 
-getRequest('http://127.0.0.1:5000', requestobject)
 
 
 
