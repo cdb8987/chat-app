@@ -4,10 +4,7 @@ from datetime import date
 from flask import jsonify
 
 
-def access_database(db_request):
-    '''Format of db_request:
-    db_request = {request_type: '', username: '', password: '', message_text: '' }'''
-
+def access_database():
     createddate = datetime.date.today()
 
     conn = psycopg2.connect(
@@ -17,77 +14,67 @@ def access_database(db_request):
         password='password')
 
     cur = conn.cursor()
+    return [cur, conn, createddate]
 
 
-# def disconnect_from_database(cur, conn):
-#     conn.commit()
-#     cur.close()
-#     conn.close()
-
-    def add_message(cur, conn, username, messagetext, createddate):
-        cur.execute('INSERT INTO messages (userid, messagetext, createddate)'
-                    'VALUES (%s, %s, %s)',
-                    (f"(SELECT {username} from users where username = 'Batman')", messagetext, createddate))
-
-        conn.commit()
-
-        cur.close()
-        conn.close()
-        return jsonify({'response': f'message ({messagetext}) added to database'})
-
-    def add_user(cur, conn, username, createddate, password):
-
-        print(f'VALUES ({username}, {createddate}, {password})')
-
-        cur.execute(
-            'INSERT INTO users (username, createddate, password) VALUES (%s, %s, %s)', [
-                username, createddate, password]
+def disconnect_from_database(cur, conn):
+    conn.commit()
+    cur.close()
+    conn.close()
 
 
-        )
+def add_message(username, messagetext):
+    connection = access_database()
+    cur, conn, createddate = connection[0], connection[1], connection[2]
 
-        conn.commit()
+    cur.execute('INSERT INTO messages (userid, messagetext, createddate)'
+                'VALUES (%s, %s, %s)',
+                (f"(SELECT {username} from users where username = 'Batman')", messagetext, createddate))
 
-        cur.close()
-        conn.close()
-        return jsonify({'response': f'message ({username}, {password}) added to database'})
+    disconnect_from_database(cur, conn)
+    return jsonify({'response': f'message ({messagetext}) added to database'})
 
-    def retrieve_username_password_pair(cur, conn, username, password):
-        cur.execute('SELECT * FROM users WHERE username = %s', [username])
-        try:
-            row = cur.fetchone()
-            valid_password = row[3]
-            print('valid password is: ', valid_password)
-            conn.commit()
-            cur.close()
-            conn.close()
-            print(password == valid_password, password, valid_password)
-            if password == valid_password:
-                return True
-            else:
-                return False
 
-        except TypeError:
-            print('USERNAME NOT FOUND')
-            return False
+def add_user(username, password):
+    connection = access_database()
+    cur, conn, createddate = connection[0], connection[1], connection[2]
 
-    def retrieve_messages(cur, conn):
-        cur.execute('SELECT * FROM messages')
-        messages = cur.fetchall()
-        conn.commit()
+    print(f'VALUES ({username}, {createddate}, {password})')
 
-        cur.close()
-        conn.close()
-        return jsonify(messages)
+    cur.execute(
+        'INSERT INTO users (username, createddate, password) VALUES (%s, %s, %s)', [
+            username, createddate, password]
+    )
 
-    # return retrieve_messages(cur, conn)
+    disconnect_from_database(cur, conn)
+    return jsonify({'response': f'message ({username}, {password}) added to database'})
 
-    if db_request['request_type'] == 'add_user':
-        add_user(cur, conn, db_request['username'],
-                 createddate, db_request['password'])
-    if db_request['request_type'] == 'retrieve_username_password_pair':
-        return retrieve_username_password_pair(
-            cur, conn, db_request['username'], db_request['password'])
-    if db_request['request_type'] == 'write_message':
-        add_message(cur, conn, db_request['username'],
-                    db_request['messagetext'], createddate)
+
+def retrieve_username_password_pair(username, password):
+    connection = access_database()
+    cur, conn = connection[0], connection[1]
+
+    cur.execute('SELECT * FROM users WHERE username = %s', [username])
+    try:
+        row = cur.fetchone()
+        valid_password = row[3]
+        print('valid password is: ', valid_password)
+        print(password == valid_password, password, valid_password)
+        disconnect_from_database(cur, conn)
+        return password == valid_password
+
+    except TypeError:
+        disconnect_from_database(cur, conn)
+        print('USERNAME NOT FOUND')
+        return False
+
+
+def retrieve_messages(cur, conn):
+    connection = access_database()
+    cur, conn = connection[0], connection[1]
+
+    cur.execute('SELECT * FROM messages')
+    messages = cur.fetchall()
+    disconnect_from_database(cur, conn)
+
+    return jsonify(messages)

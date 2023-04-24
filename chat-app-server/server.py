@@ -63,12 +63,8 @@ def login():
     submitted_username = request.headers.get('Username')
     submitted_password = request.headers.get('Password')
 
-    db_request = {'request_type': 'retrieve_username_password_pair',
-                  'username': submitted_username, 'password': submitted_password}
-    print('server function evaluates to:',
-          database_functions.access_database(db_request))
-
-    if database_functions.access_database(db_request):
+    if database_functions.retrieve_username_password_pair(
+            submitted_username, submitted_password):
 
         access_token = jwt.encode(
             {'user': request.headers.get('Username'), 'exp': datetime.datetime.utcnow()+datetime.timedelta(minutes=30)}, app.config['SECRET_KEY'])
@@ -116,9 +112,8 @@ def create_user():
     new_password = request.headers.get('Password')
     print("This profile will be added to the user database:  \n",
           new_username, new_password)
-    db_request = {'request_type': 'add_user', 'username': new_username,
-                  'password': new_password, 'message_text': None}
-    database_functions.access_database(db_request)
+    database_functions.add_user(new_username,
+                                new_password)
 
     return '<p>Create User function executed.</p>'
 
