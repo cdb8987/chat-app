@@ -27,9 +27,14 @@ def add_message(username, messagetext):
     connection = access_database()
     cur, conn, createddate = connection[0], connection[1], connection[2]
 
+    print(f'inside add_message username value: {username} ')
+
+    cur.execute('SELECT user_id from users where username = %s', (username, ))
+    user_id = cur.fetchone()[0]
+
     cur.execute('INSERT INTO messages (userid, messagetext, createddate)'
                 'VALUES (%s, %s, %s)',
-                (f"(SELECT {username} from users where username = 'Batman')", messagetext, createddate))
+                (user_id, messagetext, createddate))
 
     disconnect_from_database(cur, conn)
     return jsonify({'response': f'message ({messagetext}) added to database'})

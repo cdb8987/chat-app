@@ -117,8 +117,11 @@ def write_message():
     token = request.cookies.get('access_token')
     data = jwt.decode(token, app.config['SECRET_KEY'], ["HS256"])
     username = data['user']
+    messagetext = request.headers.get('MessageText')
 
-    print(username, 'wrote', request.headers.get('MessageText'))
+    database_functions.add_message(username, messagetext)
+
+    print(username, 'wrote', messagetext)
     return jsonify({'message': 'writemessage function successfully executed'})
 
 
