@@ -25,7 +25,15 @@ function LoginPage(props){
         if(requestType === 'Login'){
         return (fetch("http://127.0.0.1:5000/login", requestOptions)
         .then(response => response.text())
-        .then(result => console.log(result))
+        .then(result => JSON.parse(result))
+        .then((result)=>{
+            console.log(typeof result)
+            console.log('result.login returns', result['login'])
+            if(result['login']=== true){props.updatelogin(true)}
+
+        }
+        
+        )
         .catch(error => console.log('error', error)) 
         )}
         if(requestType === 'CreateUser'){
@@ -55,7 +63,7 @@ function LoginPage(props){
                     <p> Username:  <input type="text" id="username" name="username" 
                     value={username} onChange={(e) => setUsername(e.target.value)} required/></p>   
 
-                    <p> Password:  <input type="text" id="password" name="password" 
+                    <p> Password:  <input type="password" id="password" name="password" 
                     value={password} onChange={(e) => setPassword(e.target.value)} required/></p>
 
 
@@ -71,9 +79,9 @@ function LoginPage(props){
                     
 
                     <div style={{display: 'flex', justifyContent: 'center', alignItems:'center'}}>
-                        <button className="btn btn-primary" onClick={()=>{handleSubmit(username, password, 'Login'); props.updatelogin(true)}}>LOG IN</button>
+                        <button className="btn btn-primary" onClick={()=>{handleSubmit(username, password, 'Login');setUsername('');setPassword('')}}>LOG IN</button>
                         <p style={{paddingTop: '15px', paddingLeft: '20px', paddingRight: '20px'}}>   OR   </p>
-                        <button className="btn btn-outline-primary" onClick={()=>{handleSubmit(username, password, 'CreateUser')}}>SIGN UP</button>
+                        <button className="btn btn-outline-primary" onClick={()=>{handleSubmit(username, password, 'CreateUser');setUsername('');setPassword('')}}>SIGN UP</button>
                 </div>
                 </div>
                 

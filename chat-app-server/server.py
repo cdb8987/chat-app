@@ -15,6 +15,9 @@ app = Flask(__name__, static_folder='C:/Users/Charlie (Personal)/Desktop/SDMM/Mo
 
 app.config['SECRET_KEY'] = "thisisthesecretkey"
 
+token_blacklist = [
+    'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjoiY2RiODk4NyIsImV4cCI6MTY4MjQzMTM0OH0.HKdzJ2zjAjNNolCMbnJn_diB58YEnFmDceTkGZoMImk']
+
 dummyMessageData = [
     {'id': 1,
      'username': 'Andy S',
@@ -50,6 +53,8 @@ def token_required(f):
         try:
             data = jwt.decode(token, app.config['SECRET_KEY'], ["HS256"])
             print(data)
+            if token in token_blacklist:
+                return jsonify({'message': 'Token is blacklisted/revoked'}), 403
         except:
             return jsonify({'message': 'Token is invalid'}), 403
 
@@ -77,6 +82,15 @@ def login():
         return response, 200
     print('\npassword did NOT match!!\n')
     return make_response('Could not Verify', 401, {'WWW-Authenticate': 'Basic realm="login required"'})
+
+
+@app.get('/logout')
+@token_required
+def logout():
+    token = request.cookies.get('access_token')
+    token_blacklist.append(token)
+    print(f'Current Token blacklist: {token_blacklist}')
+    return jsonify({'message': 'your token is blacklisted and you are logged out'})
 
 
 @app.route("/")

@@ -1,6 +1,13 @@
 
 function MainPage(props){
     console.log(props.UsersOnline)
+
+
+    const logOut = ()=>{
+        return fetch("http://127.0.0.1:5000/logout")
+    }
+
+    
     
    
     let UserData = (
@@ -36,7 +43,7 @@ function MainPage(props){
                     <div className="messagefeed" style={{flexBasis: '66.66%', overflow:'auto'}}>
                         <div className="container p-3 my-3 border" style={{textAlign: 'center'}}>
                                 MESSAGES
-                                <button style={{float: 'right'}}onClick={()=> props.updateLogin(false)}>Log Out</button>
+                                <button style={{float: 'right'}}onClick={()=> {props.updateLogin(false); logOut()}}>Log Out</button>
                         </div>
                         {MessageData}
                         <div><button className="btn btn-primary">Send Message</button><input style={{width:"100%"}}></input></div>
