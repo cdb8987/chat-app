@@ -29,11 +29,11 @@ function App() {
   // }
 
 
-
+  let testPROP = 'IM A TEST PROP'
   
   if(logInStatus === true){
     return (
-      <MainPage UsersOnline={dummyUsersOnline} messageFeed={messageFeed} setMessageFeed={setMessageFeed} updateLogin={setLoginStatus}/>
+      <MainPage UsersOnline={dummyUsersOnline} messageFeed={messageFeed} testPROP={testPROP} setMessageFeed={setMessageFeed} updateLogin={setLoginStatus}/>
     )
   }
   

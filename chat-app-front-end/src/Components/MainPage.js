@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+// import MessageFeed from './MessageFeed';
 
 function MainPage(props){
     // console.log(props.UsersOnline)
@@ -51,10 +52,12 @@ function MainPage(props){
                     const entry = {name: response[i][4], time: response[i][3], message: response[i][2]}
                     message_feed.push(entry)
                 }
-                // props.setMessageFeed(message_feed)
+                console.log(props)
+                props.setMessageFeed(message_feed)
                 console.log('HERE IS YOUR FORMATTED MESSAGE FEED ', message_feed)
                 return message_feed
             })
+            .catch(error => console.log('error', error))
             
             )
     }
@@ -66,9 +69,11 @@ function MainPage(props){
             {props.UsersOnline.map(item=>(<p>🟢{item}</p>))}
         </div>
     )
+    console.log(props)
+    console.log('\n\n YOUR MESSAGE FEED CURRENTLY CONTAINS', props.messageFeed)
     let MessageData = (
         <div>
-            {props.MessageFeed.map(item=> (
+            {props.messageFeed.map(item=> (
             <div><strong>{item.name}</strong> {item.time}   
             <div>
                 <p style={{border:'gray', borderStyle:'solid', borderRadius:'5px'}}>{item.message}</p>
