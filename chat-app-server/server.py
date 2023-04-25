@@ -15,8 +15,7 @@ app = Flask(__name__, static_folder='C:/Users/Charlie (Personal)/Desktop/SDMM/Mo
 
 app.config['SECRET_KEY'] = "thisisthesecretkey"
 
-token_blacklist = [
-    'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjoiY2RiODk4NyIsImV4cCI6MTY4MjQzMTM0OH0.HKdzJ2zjAjNNolCMbnJn_diB58YEnFmDceTkGZoMImk']
+token_blacklist = []
 
 dummyMessageData = [
     {'id': 1,
@@ -87,6 +86,7 @@ def login():
 @app.get('/logout')
 @token_required
 def logout():
+
     token = request.cookies.get('access_token')
     token_blacklist.append(token)
     print(f'Current Token blacklist: {token_blacklist}')
@@ -101,16 +101,25 @@ def index():
 @app.get("/messages")
 @token_required
 def retrieve_messages():
-    return [f'There are currently {len(dummyMessageData)} messages.  ', dummyMessageData]
+    message_data = database_functions.retrieve_messages()
+    return message_data
+
+    # return [f'There are currently {len(dummyMessageData)} messages.  ', dummyMessageData]
 
 
 @app.post("/messages")
+@token_required
 def write_message():
-
+    print('\n\nwrite_message function EXECUTED\n\n')
     # newMessage = request.args['user']
     # dummyMessageData.append(newMessage)
-    # print(request.headers)
-    return jsonify({'message': 'you have reached the write_message endpoint'})
+
+    token = request.cookies.get('access_token')
+    data = jwt.decode(token, app.config['SECRET_KEY'], ["HS256"])
+    username = data['user']
+
+    print(username, 'wrote', request.headers.get('MessageText'))
+    return jsonify({'message': 'writemessage function successfully executed'})
 
 
 @app.get("/users")

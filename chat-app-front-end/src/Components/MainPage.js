@@ -1,11 +1,44 @@
+import React, { useState } from 'react';
 
 function MainPage(props){
-    console.log(props.UsersOnline)
+    // console.log(props.UsersOnline)
+
+    let [sendMessageText, setSendMessageText] = useState('')
 
 
     const logOut = ()=>{
         return fetch("http://127.0.0.1:5000/logout")
     }
+    const writeMessage = (MessageText)=>{
+        const myHeaders = new Headers();
+    
+        myHeaders.append("MessageText", MessageText);
+        // if(messagetext){myHeaders.append("messagetext", messagetext);}
+    
+        const raw = "";
+
+        const requestOptions = {
+        method: 'POST',
+        headers: myHeaders,
+        body: raw,
+        redirect: 'follow'
+        };
+        console.log(requestOptions);
+        
+        
+        console.log('messagetext changed to', sendMessageText)
+
+        return (
+            fetch("http://127.0.0.1:5000/messages", requestOptions)
+            .then(response => response.text())
+            .then(result => JSON.parse(result))
+            .then((result)=>{
+            console.log(typeof result)
+            console.log('result.login returns', result['login'])
+            if(result['login']=== true){props.updatelogin(true)}
+            }
+            ))
+        }
 
     
     
@@ -46,7 +79,7 @@ function MainPage(props){
                                 <button style={{float: 'right'}}onClick={()=> {props.updateLogin(false); logOut()}}>Log Out</button>
                         </div>
                         {MessageData}
-                        <div><button className="btn btn-primary">Send Message</button><input style={{width:"100%"}}></input></div>
+                        <div><button className="btn btn-primary" onClick={()=> {writeMessage(sendMessageText); setSendMessageText('')}}  >Send Message</button><input style={{width:"100%"}}value={sendMessageText} onChange={(e) => setSendMessageText(e.target.value)} required></input></div>
                     </div>
                     
                     

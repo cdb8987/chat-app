@@ -69,7 +69,7 @@ def retrieve_username_password_pair(username, password):
         return False
 
 
-def retrieve_messages(cur, conn):
+def retrieve_messages():
     connection = access_database()
     cur, conn = connection[0], connection[1]
 

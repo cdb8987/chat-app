@@ -17,6 +17,7 @@ let loggedIn = false
 
 function App() {
   let [logInStatus, setLoginStatus] = useState(loggedIn)
+  let [messageFeed, setMessageFeed] = useState(dummyMessageFeed)
 
   // const generateHeaders = (username, password, messagetext = false)=>{
   //   const myHeaders = new Headers();
@@ -32,7 +33,7 @@ function App() {
   
   if(logInStatus === true){
     return (
-      <MainPage UsersOnline={dummyUsersOnline} MessageFeed={dummyMessageFeed} updateLogin={setLoginStatus}/>
+      <MainPage UsersOnline={dummyUsersOnline} messageFeed={messageFeed} setMessageFeed={setMessageFeed} updateLogin={setLoginStatus}/>
     )
   }
   
