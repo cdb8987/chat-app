@@ -102,7 +102,8 @@ def index():
 @token_required
 def retrieve_messages():
     message_data = database_functions.retrieve_messages()
-    return message_data
+    print(type(message_data), message_data)
+    return jsonify(message_data)
 
     # return [f'There are currently {len(dummyMessageData)} messages.  ', dummyMessageData]
 

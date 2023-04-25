@@ -39,7 +39,25 @@ function MainPage(props){
             }
             ))
         }
-
+    
+    const retrieveMessageFeed = ()=>{
+        return (
+            fetch("http://127.0.0.1:5000/messages")
+            .then(response=> response.json())
+            .then((response)=>{
+                let message_feed = []
+                // {name: 'Charlie', time: '9:00am', message: 'Hey whats up guys?'}
+                for(let i=0; i < response.length; i++ ){
+                    const entry = {name: response[i][4], time: response[i][3], message: response[i][2]}
+                    message_feed.push(entry)
+                }
+                // props.setMessageFeed(message_feed)
+                console.log('HERE IS YOUR FORMATTED MESSAGE FEED ', message_feed)
+                return message_feed
+            })
+            
+            )
+    }
     
     
    
@@ -76,7 +94,8 @@ function MainPage(props){
                     <div className="messagefeed" style={{flexBasis: '66.66%', overflow:'auto'}}>
                         <div className="container p-3 my-3 border" style={{textAlign: 'center'}}>
                                 MESSAGES
-                                <button style={{float: 'right'}}onClick={()=> {props.updateLogin(false); logOut()}}>Log Out</button>
+                                {/* <button style={{float: 'right'}}onClick={()=> {props.updateLogin(false); logOut()}}>Log Out</button> */}
+                                <button style={{float: 'right'}}onClick={()=> {retrieveMessageFeed()}}>Log Out</button>
                         </div>
                         {MessageData}
                         <div><button className="btn btn-primary" onClick={()=> {writeMessage(sendMessageText); setSendMessageText('')}}  >Send Message</button><input style={{width:"100%"}}value={sendMessageText} onChange={(e) => setSendMessageText(e.target.value)} required></input></div>

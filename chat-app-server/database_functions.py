@@ -78,8 +78,14 @@ def retrieve_messages():
     connection = access_database()
     cur, conn = connection[0], connection[1]
 
-    cur.execute('SELECT * FROM messages')
+    # cur.execute('SELECT (userid, messagetext, createddate) FROM messages')
+
+    cur.execute(
+        'SELECT messages.*, users.username FROM messages JOIN users ON messages.userid = users.user_id')
+
     messages = cur.fetchall()
+
+    print('INSIDE retrieve_messages', type(messages), messages)
     disconnect_from_database(cur, conn)
 
-    return jsonify(messages)
+    return messages
