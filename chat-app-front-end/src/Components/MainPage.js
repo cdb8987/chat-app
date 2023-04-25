@@ -3,12 +3,13 @@ import React, { useState } from 'react';
 
 function MainPage(props){
     // console.log(props.UsersOnline)
+    
 
     let [sendMessageText, setSendMessageText] = useState('')
 
 
     const logOut = ()=>{
-        return fetch("http://127.0.0.1:5000/logout")
+        return fetch("http://127.0.0.1:5000/logout").then(()=> props.setLoginStatus(false))
     }
     const writeMessage = (MessageText)=>{
         const myHeaders = new Headers();
@@ -34,7 +35,8 @@ function MainPage(props){
             .then(response => response.text())
             .then(result => JSON.parse(result))
             .then((result)=>{
-            console.log(typeof result)
+            console.log(typeof result);
+            retrieveMessageFeed()
             console.log('result.login returns', result['login'])
             if(result['login']=== true){props.updatelogin(true)}
             }
@@ -100,7 +102,7 @@ function MainPage(props){
                         <div className="container p-3 my-3 border" style={{textAlign: 'center'}}>
                                 MESSAGES
                                 {/* <button style={{float: 'right'}}onClick={()=> {props.updateLogin(false); logOut()}}>Log Out</button> */}
-                                <button style={{float: 'right'}}onClick={()=> {retrieveMessageFeed()}}>Log Out</button>
+                                <button style={{float: 'right'}}onClick={()=> {logOut()}}>Log Out</button>
                         </div>
                         {MessageData}
                         <div><button className="btn btn-primary" onClick={()=> {writeMessage(sendMessageText); setSendMessageText('')}}  >Send Message</button><input style={{width:"100%"}}value={sendMessageText} onChange={(e) => setSendMessageText(e.target.value)} required></input></div>

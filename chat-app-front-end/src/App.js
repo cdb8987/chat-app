@@ -28,7 +28,7 @@ function App() {
   
   if(logInStatus === true){
     return (
-      <MainPage UsersOnline={dummyUsersOnline} messageFeed={messageFeed} testPROP={testPROP} setMessageFeed={setMessageFeed} updateLogin={setLoginStatus}/>
+      <MainPage UsersOnline={dummyUsersOnline} messageFeed={messageFeed} testPROP={testPROP} setMessageFeed={setMessageFeed} setLoginStatus={setLoginStatus}/>
     )
   }
   
