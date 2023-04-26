@@ -5,7 +5,7 @@ function MainPage(props){
     
 
     let [sendMessageText, setSendMessageText] = useState('')
-
+    
 
     const logOut = ()=>{
         return fetch("http://127.0.0.1:5000/logout").then(()=> props.setLoginStatus(false))
@@ -78,8 +78,8 @@ function MainPage(props){
             )
     }
     
-    
-   
+    const autoUpdateMessageFeed = ()=>{setInterval(retrieveMessageFeed, 5000)}
+    autoUpdateMessageFeed()
     let UserData = (
         <div>
             {props.activeUsers.map(item=>(<p>🟢{item}</p>))}
@@ -100,7 +100,7 @@ function MainPage(props){
         
     )
 
-
+    
     return (
         <div className="page">
                 <div className="pagediv" style={{display: 'flex'}}>

@@ -18,6 +18,8 @@ app.config['SECRET_KEY'] = "thisisthesecretkey"
 
 generated_tokens_log = []
 token_blacklist = []
+times_messages_requested = 0
+times_users_requested = 0
 
 dummyMessageData = [
     {'id': 1,
@@ -73,7 +75,7 @@ def login():
             submitted_username, submitted_password):
 
         access_token = jwt.encode(
-            {'user': request.headers.get('Username'), 'exp': datetime.datetime.utcnow()+datetime.timedelta(seconds=30)}, app.config['SECRET_KEY'])
+            {'user': request.headers.get('Username'), 'exp': datetime.datetime.utcnow()+datetime.timedelta(minutes=30)}, app.config['SECRET_KEY'])
         print("\npassword matched!!\n TOKEN GENERATED: \n", access_token)
         generated_tokens_log.append(access_token)
 
@@ -98,14 +100,17 @@ def logout():
 
 @app.route("/")
 def index():
+
     return send_from_directory('C:/Users/Charlie (Personal)/Desktop/SDMM/Modules/Module 11/chat-app/chat-app-front-end/build', 'index.html')
 
 
 @app.get("/messages")
 @token_required
 def retrieve_messages():
+    times_messages_requested = + 1
     message_data = database_functions.retrieve_messages()
     print(type(message_data), message_data)
+    print('time_messages_requested', times_messages_requested)
     return jsonify(message_data)
 
     # return [f'There are currently {len(dummyMessageData)} messages.  ', dummyMessageData]
@@ -114,6 +119,7 @@ def retrieve_messages():
 @app.post("/messages")
 @token_required
 def write_message():
+
     print('\n\nwrite_message function EXECUTED\n\n')
     # newMessage = request.args['user']
     # dummyMessageData.append(newMessage)
@@ -142,7 +148,8 @@ def get_loggedin_user_list():
             continue
 
     print('ACTIVE USERS:', active_users)
-    return active_users
+    print('times_users_requested ', times_users_requested)
+    return list(set(active_users))
 
 
 @app.post("/users")
