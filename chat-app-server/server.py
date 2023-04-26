@@ -8,6 +8,7 @@ from functools import wraps
 from flask_restful import Api, Resource, reqparse
 from flask import request
 import database_functions
+import time
 
 
 app = Flask(__name__, static_folder='C:/Users/Charlie (Personal)/Desktop/SDMM/Modules/Module 11/chat-app/chat-app-front-end/build',
@@ -15,6 +16,7 @@ app = Flask(__name__, static_folder='C:/Users/Charlie (Personal)/Desktop/SDMM/Mo
 
 app.config['SECRET_KEY'] = "thisisthesecretkey"
 
+generated_tokens_log = []
 token_blacklist = []
 
 dummyMessageData = [
@@ -71,8 +73,9 @@ def login():
             submitted_username, submitted_password):
 
         access_token = jwt.encode(
-            {'user': request.headers.get('Username'), 'exp': datetime.datetime.utcnow()+datetime.timedelta(minutes=30)}, app.config['SECRET_KEY'])
+            {'user': request.headers.get('Username'), 'exp': datetime.datetime.utcnow()+datetime.timedelta(seconds=30)}, app.config['SECRET_KEY'])
         print("\npassword matched!!\n TOKEN GENERATED: \n", access_token)
+        generated_tokens_log.append(access_token)
 
         response = jsonify({'login': True})
         response.set_cookie('access_token', access_token,
@@ -128,9 +131,18 @@ def write_message():
 
 @app.get("/users")
 @token_required
-def retrieve_users():
+def get_loggedin_user_list():
+    active_users = []
+    for i in generated_tokens_log:
+        try:
+            valid_user = jwt.decode(i, app.config['SECRET_KEY'], ["HS256"])
+            if i not in token_blacklist:
+                active_users.append(valid_user['user'])
+        except:
+            continue
 
-    return '<p>Get Users Function Executed</p>'
+    print('ACTIVE USERS:', active_users)
+    return active_users
 
 
 @app.post("/users")
