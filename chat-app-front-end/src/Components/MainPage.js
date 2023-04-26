@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 // import MessageFeed from './MessageFeed';
 
 function MainPage(props){
-    // console.log(props.UsersOnline)
     
 
     let [sendMessageText, setSendMessageText] = useState('')
@@ -11,6 +10,21 @@ function MainPage(props){
     const logOut = ()=>{
         return fetch("http://127.0.0.1:5000/logout").then(()=> props.setLoginStatus(false))
     }
+    const updateActiveUsers = ()=>{
+        return fetch("http://127.0.0.1:5000/users")
+        .then(response=> response.json())
+        .then((response)=> {
+            if(String(props.activeUsers) != String(response)){
+                console.log('props.activeusers:',props.activeUsers, 'response:', response, 'RESETTING ACTIVE USER STATE', 'props and response are the same: ', props.activeUsers == response, 'type of props', typeof props.activeUsers, 'typeof response ', response)
+                props.setActiveUsers(response)
+            }
+            
+        })
+    }
+    const autoUpdateActiveUsers = ()=>{setInterval(updateActiveUsers, 5000)};
+    // updateActiveUsers()
+    autoUpdateActiveUsers()
+
     const writeMessage = (MessageText)=>{
         const myHeaders = new Headers();
     
@@ -68,7 +82,7 @@ function MainPage(props){
    
     let UserData = (
         <div>
-            {props.UsersOnline.map(item=>(<p>🟢{item}</p>))}
+            {props.activeUsers.map(item=>(<p>🟢{item}</p>))}
         </div>
     )
     console.log(props)
