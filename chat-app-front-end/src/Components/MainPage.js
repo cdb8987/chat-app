@@ -121,13 +121,17 @@ function MainPage(props){
                         <div className="userdata">{UserData}
                         </div>
                     </div>
-                    <div className="messagefeed" style={{flexBasis: '66.66%', overflow:'auto'}}>
+                    <div className="messagefeed" style={{flexBasis: '66.66%'}}>
                         <div className="container p-3 my-3 border" style={{textAlign: 'center'}}>
                                 MESSAGES
                                 {/* <button style={{float: 'right'}}onClick={()=> {props.updateLogin(false); logOut()}}>Log Out</button> */}
                                 <button style={{float: 'right'}}onClick={()=> {logOut()}}>Log Out</button>
                         </div>
+
+                        <div style={{height: '70%', overflow:'auto'}}>
                         {MessageData}
+                        </div>
+                        
                         <div><button className="btn btn-primary" onClick={()=> {writeMessage(sendMessageText); setSendMessageText(''); updateActiveUsers();retrieveMessageFeed() }}  >Send Message</button><input style={{width:"100%"}}value={sendMessageText} onChange={(e) => setSendMessageText(e.target.value)} required></input></div>
                     </div>
                     
