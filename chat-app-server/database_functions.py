@@ -55,6 +55,20 @@ def add_user(username, password):
     return jsonify({'response': f'message ({username}, {password}) added to database'})
 
 
+def check_username_availability(username):
+    connection = access_database()
+    cur, conn = connection[0], connection[1]
+    cur.execute('SELECT * FROM users WHERE username = %s', [username])
+    try:
+        res = cur.fetchone()
+        print(
+            f'\n\nThe username {username} is already taken.  Please select a different one.  \n\n')
+        return False
+
+    except:
+        return True
+
+
 def retrieve_username_password_pair(username, password):
     connection = access_database()
     cur, conn = connection[0], connection[1]

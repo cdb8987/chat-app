@@ -85,7 +85,7 @@ def login():
         print(request.headers.get('username'), request.headers.get('Password'))
         return response, 200
     print('\npassword did NOT match!!\n')
-    return make_response('Could not Verify', 401, {'WWW-Authenticate': 'Basic realm="login required"'})
+    # return make_response('Could not Verify', 401, {'WWW-Authenticate': 'Basic realm="login required"'})
 
 
 @app.get('/logout')
@@ -156,10 +156,13 @@ def get_loggedin_user_list():
 def create_user():
     new_username = request.headers.get('Username')
     new_password = request.headers.get('Password')
-    print("This profile will be added to the user database:  \n",
+    print("Making request to add this user-password pair to database:  \n",
           new_username, new_password)
-    database_functions.add_user(new_username,
-                                new_password)
+
+    if database_functions.check_username_availability(new_username):
+        database_functions.add_user(new_username, new_password)
+    else:
+        print('USER NOT ADDED.  CONFLICT')
 
     return '<p>Create User function executed.</p>'
 
