@@ -6,3 +6,9 @@
 4.  For active, valid tokens, extract and return a list of their associated usernames. 
 5.  Create a list called active_users and update it with the results of the function.  Trigger this function once per minute on an increment (to get rid of expired tokens).  Also trigger this function from the front end when a user clicks "logout" so that logged out users no longer show up
 5.  Create a front end function that updates the state of users with a call to the server at /retrieve users route every 5 seconds.  
+
+
+
+
+component render executes function (update state)
+IF STATE UDPATES: component renders (loop back to beginning)

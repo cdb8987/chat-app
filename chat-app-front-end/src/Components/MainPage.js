@@ -1,29 +1,32 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 // import MessageFeed from './MessageFeed';
 
 function MainPage(props){
     
 
     let [sendMessageText, setSendMessageText] = useState('')
+    const [count, setCount] = useState(0);
     
 
     const logOut = ()=>{
         return fetch("http://127.0.0.1:5000/logout").then(()=> props.setLoginStatus(false))
     }
     const updateActiveUsers = ()=>{
-        return fetch("http://127.0.0.1:5000/users")
+        fetch("http://127.0.0.1:5000/users")
         .then(response=> response.json())
         .then((response)=> {
             if(String(props.activeUsers) != String(response)){
-                console.log('props.activeusers:',props.activeUsers, 'response:', response, 'RESETTING ACTIVE USER STATE', 'props and response are the same: ', props.activeUsers == response, 'type of props', typeof props.activeUsers, 'typeof response ', response)
+                // console.log('props.activeusers:',props.activeUsers, 'response:', response, 'RESETTING ACTIVE USER STATE', 'props and response are the same: ', props.activeUsers == response, 'type of props', typeof props.activeUsers, 'typeof response ', response)
+                console.log('page-rerender triggered by updateActiveUsers')
                 props.setActiveUsers(response)
             }
             
         })
     }
-    const autoUpdateActiveUsers = ()=>{setInterval(updateActiveUsers, 5000)};
-    // updateActiveUsers()
-    autoUpdateActiveUsers()
+    
+    // const autoUpdateActiveUsers = ()=>{setInterval(updateActiveUsers, 5000)};
+    // // updateActiveUsers()
+    // autoUpdateActiveUsers()
 
     const writeMessage = (MessageText)=>{
         const myHeaders = new Headers();
@@ -58,7 +61,6 @@ function MainPage(props){
         }
     
     const retrieveMessageFeed = ()=>{
-        return (
             fetch("http://127.0.0.1:5000/messages")
             .then(response=> response.json())
             .then((response)=>{
@@ -69,17 +71,24 @@ function MainPage(props){
                     message_feed.push(entry)
                 }
                 console.log(props)
+                console.log('page-rerender triggered by retrieveMessageFeed')
                 props.setMessageFeed(message_feed)
                 console.log('HERE IS YOUR FORMATTED MESSAGE FEED ', message_feed)
                 return message_feed
             })
             .catch(error => console.log('error', error))
-            
-            )
     }
     
-    const autoUpdateMessageFeed = ()=>{setInterval(retrieveMessageFeed, 5000)}
-    autoUpdateMessageFeed()
+    useEffect(()=> {
+        const interval = setInterval(()=>{setCount(count => count + 1); updateActiveUsers();
+            retrieveMessageFeed()}, 1000);
+        return ()=>{clearInterval(interval)}
+    }, [])
+    
+    
+    
+    // const autoUpdateMessageFeed = ()=>{setInterval(retrieveMessageFeed, 5000)}
+    // autoUpdateMessageFeed()
     let UserData = (
         <div>
             {props.activeUsers.map(item=>(<p>🟢{item}</p>))}
@@ -119,7 +128,7 @@ function MainPage(props){
                                 <button style={{float: 'right'}}onClick={()=> {logOut()}}>Log Out</button>
                         </div>
                         {MessageData}
-                        <div><button className="btn btn-primary" onClick={()=> {writeMessage(sendMessageText); setSendMessageText('')}}  >Send Message</button><input style={{width:"100%"}}value={sendMessageText} onChange={(e) => setSendMessageText(e.target.value)} required></input></div>
+                        <div><button className="btn btn-primary" onClick={()=> {writeMessage(sendMessageText); setSendMessageText(''); updateActiveUsers();retrieveMessageFeed() }}  >Send Message</button><input style={{width:"100%"}}value={sendMessageText} onChange={(e) => setSendMessageText(e.target.value)} required></input></div>
                     </div>
                     
                     

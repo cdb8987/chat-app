@@ -109,8 +109,8 @@ def index():
 def retrieve_messages():
     times_messages_requested = + 1
     message_data = database_functions.retrieve_messages()
-    print(type(message_data), message_data)
-    print('time_messages_requested', times_messages_requested)
+    # print(type(message_data), message_data)
+    # print('time_messages_requested', times_messages_requested)
     return jsonify(message_data)
 
     # return [f'There are currently {len(dummyMessageData)} messages.  ', dummyMessageData]
@@ -147,8 +147,8 @@ def get_loggedin_user_list():
         except:
             continue
 
-    print('ACTIVE USERS:', active_users)
-    print('times_users_requested ', times_users_requested)
+    # print('ACTIVE USERS:', active_users)
+    # print('times_users_requested ', times_users_requested)
     return list(set(active_users))
 
 

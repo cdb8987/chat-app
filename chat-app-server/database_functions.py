@@ -85,7 +85,7 @@ def retrieve_messages():
 
     messages = cur.fetchall()
 
-    print('INSIDE retrieve_messages', type(messages), messages)
+    # print('INSIDE retrieve_messages', type(messages), messages)
     disconnect_from_database(cur, conn)
 
     return messages
