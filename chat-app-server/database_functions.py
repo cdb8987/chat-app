@@ -61,9 +61,10 @@ def check_username_availability(username):
     cur.execute('SELECT * FROM users WHERE username = %s', [username])
     try:
         res = cur.fetchone()
-        print(
-            f'\n\nThe username {username} is already taken.  Please select a different one.  \n\n')
-        return False
+        if res[0] == username:
+            print(
+                f'\n\nThe username {username} is already taken.  Please select a different one.  \n\n')
+            return False
 
     except:
         return True

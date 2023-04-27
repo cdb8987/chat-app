@@ -84,6 +84,8 @@ def login():
                             httponly=True)  # Set HttpOnly to True
         print(request.headers.get('username'), request.headers.get('Password'))
         return response, 200
+    else:
+        return jsonify({'message': 'That username/password combination does not match our records.'})
     print('\npassword did NOT match!!\n')
     # return make_response('Could not Verify', 401, {'WWW-Authenticate': 'Basic realm="login required"'})
 
@@ -161,10 +163,10 @@ def create_user():
 
     if database_functions.check_username_availability(new_username):
         database_functions.add_user(new_username, new_password)
+        return jsonify({'message': 'New User Created'})
     else:
         print('USER NOT ADDED.  CONFLICT')
-
-    return '<p>Create User function executed.</p>'
+        return jsonify({'message': 'USER NOT ADDED.  THIS USERNAME IS NOT AVAILABLE. '})
 
 
 @app.route("/users")

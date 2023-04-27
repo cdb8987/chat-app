@@ -4,6 +4,7 @@ function LoginPage(props){
     
     const [username, setUsername] = useState('')
     const [password, setPassword] = useState('')
+    const [serverReplyMessage, setserverReplyMessage] = useState('')
 
     const handleSubmit = (username, password, requestType)=>{
         const myHeaders = new Headers();
@@ -30,6 +31,7 @@ function LoginPage(props){
             console.log(typeof result)
             console.log('result.login returns', result['login'])
             if(result['login']=== true){props.updatelogin(true)}
+            else{setserverReplyMessage(result['message'])}
 
         }
         
@@ -38,8 +40,11 @@ function LoginPage(props){
         )}
         if(requestType === 'CreateUser'){
             return (fetch("http://127.0.0.1:5000/users", requestOptions)
-        .then(response => response.text())
-        .then(result => console.log(result))
+        .then(response => response.json())
+        .then((response) => {
+            console.log(response['message'])
+            setserverReplyMessage(response['message'])
+        })
         .catch(error => console.log('error', error)) 
         )}
         }
@@ -84,7 +89,7 @@ function LoginPage(props){
                         <button className="btn btn-outline-primary" onClick={()=>{handleSubmit(username, password, 'CreateUser');setUsername('');setPassword('')}}>SIGN UP</button>
                 </div>
                 </div>
-                
+                <p style={{display: 'flex', justifyContent: 'center', alignItems:'center', color: 'red'}}>{serverReplyMessage}</p>
                 
             </div>
             
