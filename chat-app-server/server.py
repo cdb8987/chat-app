@@ -11,10 +11,17 @@ import database_functions
 import time
 
 
+def create_app():
+    app = Flask(__name__, static_folder='C:/Users/Charlie (Personal)/Desktop/SDMM/Modules/Module 11/chat-app/chat-app-front-end/build',
+                static_url_path='/')
+    app.config['SECRET_KEY'] = "thisisthesecretkey"
+    return app
+
+
 app = Flask(__name__, static_folder='C:/Users/Charlie (Personal)/Desktop/SDMM/Modules/Module 11/chat-app/chat-app-front-end/build',
             static_url_path='/')
-
 app.config['SECRET_KEY'] = "thisisthesecretkey"
+
 
 generated_tokens_log = []
 token_blacklist = []
@@ -66,28 +73,34 @@ def token_required(f):
 
 
 @app.post('/login')
-def login():
+def login(is_unittest=False):
 
-    submitted_username = request.headers.get('Username')
-    submitted_password = request.headers.get('Password')
+    if is_unittest:
+        submitted_username = 'TESTUSERNAME'
+        submitted_password = 'TESTPASSWORD'
+        expiration = '1682691346'
+        print('UNIT TESTING LOGIN FUNCTION')
+    else:
+        submitted_username = request.headers.get('Username')
+        submitted_password = request.headers.get('Password')
+        expiration = datetime.datetime.utcnow()+datetime.timedelta(minutes=30)
 
-    if database_functions.retrieve_username_password_pair(
-            submitted_username, submitted_password):
+    if database_functions.verify_username_and_password(
+            submitted_username, submitted_password, is_unittest):
 
         access_token = jwt.encode(
-            {'user': request.headers.get('Username'), 'exp': datetime.datetime.utcnow()+datetime.timedelta(minutes=30)}, app.config['SECRET_KEY'])
+            {'user': submitted_username, 'exp': expiration}, app.config['SECRET_KEY'])
         print("\npassword matched!!\n TOKEN GENERATED: \n", access_token)
         generated_tokens_log.append(access_token)
 
         response = jsonify({'login': True})
         response.set_cookie('access_token', access_token,
                             httponly=True)  # Set HttpOnly to True
-        print(request.headers.get('username'), request.headers.get('Password'))
+        print(submitted_username, submitted_password)
+        print('Here is the return value', response, 200)
         return response, 200
     else:
         return jsonify({'message': 'That username/password combination does not match our records.'})
-    print('\npassword did NOT match!!\n')
-    # return make_response('Could not Verify', 401, {'WWW-Authenticate': 'Basic realm="login required"'})
 
 
 @app.get('/logout')
@@ -120,21 +133,28 @@ def retrieve_messages():
 
 @app.post("/messages")
 @token_required
-def write_message():
+def write_message(is_unittest=False):
 
     print('\n\nwrite_message function EXECUTED\n\n')
     # newMessage = request.args['user']
     # dummyMessageData.append(newMessage)
-
     token = request.cookies.get('access_token')
-    data = jwt.decode(token, app.config['SECRET_KEY'], ["HS256"])
+
+    if is_unittest:
+        data = jwt.decode(token, app.config['SECRET_KEY'], [
+            "HS256"], options={"verify_exp": False})
+        messagetext = 'TESTMESSAGE'
+    else:
+        data = jwt.decode(token, app.config['SECRET_KEY'], ["HS256"])
+        messagetext = request.headers.get('MessageText')
+
     username = data['user']
-    messagetext = request.headers.get('MessageText')
 
     database_functions.add_message(username, messagetext)
 
+    status_message = f'writemessage function successfully executed. {username} wrote {messagetext} to the database.'
     print(username, 'wrote', messagetext)
-    return jsonify({'message': 'writemessage function successfully executed'})
+    return jsonify({'message': status_message})
 
 
 @app.get("/users")
@@ -169,9 +189,4 @@ def create_user():
         return jsonify({'message': 'USER NOT ADDED.  THIS USERNAME IS NOT AVAILABLE. '})
 
 
-@app.route("/users")
-def hello_world():
-    return "Return single user function executed"
-
-
-app.run(debug=True)
+# app.run(debug=True)

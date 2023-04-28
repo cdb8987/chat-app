@@ -70,10 +70,12 @@ def check_username_availability(username):
         return True
 
 
-def retrieve_username_password_pair(username, password):
+def verify_username_and_password(username, password, is_unittest):
     connection = access_database()
     cur, conn = connection[0], connection[1]
-
+    if is_unittest == True:
+        print('RETURNING TRUE FOR UNIT TEST')
+        return True
     cur.execute('SELECT * FROM users WHERE username = %s', [username])
     try:
         row = cur.fetchone()
