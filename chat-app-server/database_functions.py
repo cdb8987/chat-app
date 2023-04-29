@@ -26,6 +26,24 @@ def disconnect_from_database(cur, conn):
     conn.close()
 
 
+def create_tables():
+    connection = access_database()
+    cur, conn, createddate = connection[0], connection[1], connection[2]
+    sql = '''CREATE TABLE IF NOT EXISTS users(username text unique, createddate date, user_id SERIAL PRIMARY KEY, password text);
+CREATE TABLE IF NOT EXISTS messages (
+	referenceid SERIAL PRIMARY KEY, 
+	userid INTEGER, 
+	messagetext TEXT, 
+	createddate DATE, 
+	CONSTRAINT check_user_exists
+		FOREIGN KEY(userid)
+			REFERENCES users(user_id)
+)'''
+    cur.execute(sql)
+    disconnect_from_database(cur, conn)
+    print('CREATE TABLES FUNCTION RAN!')
+
+
 def add_message(username, messagetext):
     connection = access_database()
     cur, conn, createddate = connection[0], connection[1], connection[2]
@@ -79,6 +97,7 @@ def verify_username_and_password(username, password, is_unittest):
     if is_unittest == True:
         print('RETURNING TRUE FOR UNIT TEST')
         return True
+
     cur.execute('SELECT * FROM users WHERE username = %s', [username])
     try:
         row = cur.fetchone()

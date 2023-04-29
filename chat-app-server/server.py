@@ -22,6 +22,8 @@ app = Flask(__name__, static_folder='C:/Users/Charlie (Personal)/Desktop/SDMM/Mo
             static_url_path='/')
 app.config['SECRET_KEY'] = "thisisthesecretkey"
 
+database_functions.create_tables()
+
 
 generated_tokens_log = []
 token_blacklist = []
@@ -189,4 +191,4 @@ def create_user():
         return jsonify({'message': 'USER NOT ADDED.  THIS USERNAME IS NOT AVAILABLE. '})
 
 
-# app.run(debug=True)
+app.run(debug=True)
