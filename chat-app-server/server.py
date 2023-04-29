@@ -10,15 +10,17 @@ from flask import request
 import database_functions
 import time
 
+build_file_path = 'C:/Users/Charlie (Personal)/Desktop/SDMM/Modules/Module 11/chat-app/chat-app-front-end/build'
+
 
 def create_app():
-    app = Flask(__name__, static_folder='C:/Users/Charlie (Personal)/Desktop/SDMM/Modules/Module 11/chat-app/chat-app-front-end/build',
+    app = Flask(__name__, static_folder=build_file_path,
                 static_url_path='/')
     app.config['SECRET_KEY'] = "thisisthesecretkey"
     return app
 
 
-app = Flask(__name__, static_folder='C:/Users/Charlie (Personal)/Desktop/SDMM/Modules/Module 11/chat-app/chat-app-front-end/build',
+app = Flask(__name__, static_folder=build_file_path,
             static_url_path='/')
 app.config['SECRET_KEY'] = "thisisthesecretkey"
 
@@ -118,7 +120,7 @@ def logout():
 @app.route("/")
 def index():
 
-    return send_from_directory('C:/Users/Charlie (Personal)/Desktop/SDMM/Modules/Module 11/chat-app/chat-app-front-end/build', 'index.html')
+    return send_from_directory(build_file_path, 'index.html')
 
 
 @app.get("/messages")
