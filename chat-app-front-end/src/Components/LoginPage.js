@@ -24,7 +24,7 @@ function LoginPage(props){
         console.log(requestOptions);
     
         if(requestType === 'Login'){
-        return (fetch("http://127.0.0.1:5000/login", requestOptions)
+        return (fetch("https://chat-app-joqt.onrender.com/login", requestOptions)
         .then(response => response.text())
         .then(result => JSON.parse(result))
         .then((result)=>{
@@ -39,7 +39,7 @@ function LoginPage(props){
         .catch(error => console.log('error', error)) 
         )}
         if(requestType === 'CreateUser'){
-            return (fetch("http://127.0.0.1:5000/users", requestOptions)
+            return (fetch("https://chat-app-joqt.onrender.com/users", requestOptions)
         .then(response => response.json())
         .then((response) => {
             console.log(response['message'])

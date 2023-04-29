@@ -10,6 +10,8 @@ from flask import request
 import database_functions
 import time
 
+hosted_url = 'https://chat-app-joqt.onrender.com'
+
 build_file_path = 'C:/Users/Charlie (Personal)/Desktop/SDMM/Modules/Module 11/chat-app/chat-app-front-end/build'
 
 

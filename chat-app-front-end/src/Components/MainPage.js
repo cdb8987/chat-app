@@ -9,10 +9,10 @@ function MainPage(props){
     
 
     const logOut = ()=>{
-        return fetch("http://127.0.0.1:5000/logout").then(()=> props.setLoginStatus(false))
+        return fetch("https://chat-app-joqt.onrender.com/logout").then(()=> props.setLoginStatus(false))
     }
     const updateActiveUsers = ()=>{
-        fetch("http://127.0.0.1:5000/users")
+        fetch("https://chat-app-joqt.onrender.com/users")
         .then(response=> response.json())
         .then((response)=> {
             if(String(props.activeUsers) != String(response)){
@@ -48,7 +48,7 @@ function MainPage(props){
         console.log('messagetext changed to', sendMessageText)
 
         return (
-            fetch("http://127.0.0.1:5000/messages", requestOptions)
+            fetch("https://chat-app-joqt.onrender.com/messages", requestOptions)
             .then(response => response.text())
             .then(result => JSON.parse(result))
             .then((result)=>{
@@ -61,7 +61,7 @@ function MainPage(props){
         }
     
     const retrieveMessageFeed = ()=>{
-            fetch("http://127.0.0.1:5000/messages")
+            fetch("https://chat-app-joqt.onrender.com/messages")
             .then(response=> response.json())
             .then((response)=>{
                 let message_feed = []
