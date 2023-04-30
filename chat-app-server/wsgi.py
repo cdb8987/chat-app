@@ -123,7 +123,8 @@ def logout():
 @app.route("/")
 def index():
 
-    return send_from_directory(build_file_path, 'index.html')
+    # return send_from_directory(build_file_path, 'index.html')
+    return '<p>You have reached the / endpoint but the files are in the wrong places./</p>'
 
 
 @app.get("/messages")
