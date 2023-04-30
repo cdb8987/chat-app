@@ -13,7 +13,7 @@ import time
 
 hosted_url = 'https://chat-app-joqt.onrender.com'
 
-build_file_path = 'chat-app-front-end/build'
+build_file_path = '../chat-app-front-end/build'
 
 
 def create_app():
@@ -123,8 +123,7 @@ def logout():
 @app.route("/")
 def index():
 
-    # return send_from_directory(build_file_path, 'index.html')
-    return '<p>You have reached the / endpoint but the files are in the wrong places./</p>'
+    return send_from_directory(build_file_path, 'index.html')
 
 
 @app.get("/messages")
