@@ -9,10 +9,10 @@ function MainPage(props){
     
 
     const logOut = ()=>{
-        return fetch("https://chat-app-joqt.onrender.com/logout").then(()=> props.setLoginStatus(false))
+        return fetch("https://chat-app-sdp2.onrender.com/logout").then(()=> props.setLoginStatus(false))
     }
     const updateActiveUsers = ()=>{
-        fetch("https://chat-app-joqt.onrender.com/users")
+        fetch("https://chat-app-sdp2.onrender.com/users")
         .then(response=> response.json())
         .then((response)=> {
             if(String(props.activeUsers) != String(response)){
@@ -48,7 +48,7 @@ function MainPage(props){
         console.log('messagetext changed to', sendMessageText)
 
         return (
-            fetch("https://chat-app-joqt.onrender.com/messages", requestOptions)
+            fetch("https://chat-app-sdp2.onrender.com/messages", requestOptions)
             .then(response => response.text())
             .then(result => JSON.parse(result))
             .then((result)=>{
@@ -61,7 +61,7 @@ function MainPage(props){
         }
     
     const retrieveMessageFeed = ()=>{
-            fetch("https://chat-app-joqt.onrender.com/messages")
+            fetch("https://chat-app-sdp2.onrender.com/messages")
             .then(response=> response.json())
             .then((response)=>{
                 let message_feed = []
