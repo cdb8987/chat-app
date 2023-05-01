@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react';
-// import MessageFeed from './MessageFeed';
 
 function MainPage(props){
     
@@ -16,23 +15,16 @@ function MainPage(props){
         .then(response=> response.json())
         .then((response)=> {
             if(String(props.activeUsers) != String(response)){
-                // console.log('props.activeusers:',props.activeUsers, 'response:', response, 'RESETTING ACTIVE USER STATE', 'props and response are the same: ', props.activeUsers == response, 'type of props', typeof props.activeUsers, 'typeof response ', response)
-                console.log('page-rerender triggered by updateActiveUsers')
                 props.setActiveUsers(response)
             }
             
         })
     }
-    
-    // const autoUpdateActiveUsers = ()=>{setInterval(updateActiveUsers, 5000)};
-    // // updateActiveUsers()
-    // autoUpdateActiveUsers()
 
     const writeMessage = (MessageText)=>{
         const myHeaders = new Headers();
     
         myHeaders.append("MessageText", MessageText);
-        // if(messagetext){myHeaders.append("messagetext", messagetext);}
     
         const raw = "";
 
@@ -42,19 +34,14 @@ function MainPage(props){
         body: raw,
         redirect: 'follow'
         };
-        console.log(requestOptions);
-        
-        
-        console.log('messagetext changed to', sendMessageText)
+
 
         return (
             fetch("https://chat-app-sdp2.onrender.com/messages", requestOptions)
             .then(response => response.text())
             .then(result => JSON.parse(result))
             .then((result)=>{
-            console.log(typeof result);
-            retrieveMessageFeed()
-            console.log('result.login returns', result['login'])
+            retrieveMessageFeed();
             if(result['login']=== true){props.updatelogin(true)}
             }
             ))
@@ -70,10 +57,7 @@ function MainPage(props){
                     const entry = {name: response[i][4], time: response[i][3], message: response[i][2]}
                     message_feed.push(entry)
                 }
-                console.log(props)
-                console.log('page-rerender triggered by retrieveMessageFeed')
                 props.setMessageFeed(message_feed)
-                console.log('HERE IS YOUR FORMATTED MESSAGE FEED ', message_feed)
                 return message_feed
             })
             .catch(error => console.log('error', error))
@@ -85,17 +69,13 @@ function MainPage(props){
         return ()=>{clearInterval(interval)}
     }, [])
     
-    
-    
-    // const autoUpdateMessageFeed = ()=>{setInterval(retrieveMessageFeed, 5000)}
-    // autoUpdateMessageFeed()
+ 
     let UserData = (
         <div>
             {props.activeUsers.map(item=>(<p>🟢{item}</p>))}
         </div>
     )
-    console.log(props)
-    console.log('\n\n YOUR MESSAGE FEED CURRENTLY CONTAINS', props.messageFeed)
+    
     let MessageData = (
         <div>
             {props.messageFeed.map(item=> (
@@ -124,7 +104,7 @@ function MainPage(props){
                     <div className="messagefeed" style={{flexBasis: '66.66%'}}>
                         <div className="container p-3 my-3 border" style={{textAlign: 'center'}}>
                                 MESSAGES
-                                {/* <button style={{float: 'right'}}onClick={()=> {props.updateLogin(false); logOut()}}>Log Out</button> */}
+                        
                                 <button style={{float: 'right'}}onClick={()=> {logOut()}}>Log Out</button>
                         </div>
 

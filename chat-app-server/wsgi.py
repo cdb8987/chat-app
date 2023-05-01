@@ -69,7 +69,6 @@ def token_required(f):
 
         try:
             data = jwt.decode(token, app.config['SECRET_KEY'], ["HS256"])
-            print(data)
             if token in token_blacklist:
                 return jsonify({'message': 'Token is blacklisted/revoked'}), 403
         except:
@@ -86,7 +85,6 @@ def login(is_unittest=False):
         submitted_username = 'TESTUSERNAME'
         submitted_password = 'TESTPASSWORD'
         expiration = '1682691346'
-        print('UNIT TESTING LOGIN FUNCTION')
     else:
         submitted_username = request.headers.get('Username')
         submitted_password = request.headers.get('Password')
@@ -97,14 +95,11 @@ def login(is_unittest=False):
 
         access_token = jwt.encode(
             {'user': submitted_username, 'exp': expiration}, app.config['SECRET_KEY'])
-        print("\npassword matched!!\n TOKEN GENERATED: \n", access_token)
         generated_tokens_log.append(access_token)
 
         response = jsonify({'login': True})
         response.set_cookie('access_token', access_token,
                             httponly=True)  # Set HttpOnly to True
-        print(submitted_username, submitted_password)
-        print('Here is the return value', response, 200)
         return response, 200
     else:
         return jsonify({'message': 'That username/password combination does not match our records.'})
@@ -116,7 +111,6 @@ def logout():
 
     token = request.cookies.get('access_token')
     token_blacklist.append(token)
-    print(f'Current Token blacklist: {token_blacklist}')
     return jsonify({'message': 'your token is blacklisted and you are logged out'})
 
 
@@ -131,20 +125,13 @@ def index():
 def retrieve_messages():
     times_messages_requested = + 1
     message_data = database_functions.retrieve_messages()
-    # print(type(message_data), message_data)
-    # print('time_messages_requested', times_messages_requested)
     return jsonify(message_data)
-
-    # return [f'There are currently {len(dummyMessageData)} messages.  ', dummyMessageData]
 
 
 @app.post("/messages")
 @token_required
 def write_message(is_unittest=False):
 
-    print('\n\nwrite_message function EXECUTED\n\n')
-    # newMessage = request.args['user']
-    # dummyMessageData.append(newMessage)
     token = request.cookies.get('access_token')
 
     if is_unittest:
@@ -160,7 +147,6 @@ def write_message(is_unittest=False):
     database_functions.add_message(username, messagetext)
 
     status_message = f'writemessage function successfully executed. {username} wrote {messagetext} to the database.'
-    print(username, 'wrote', messagetext)
     return jsonify({'message': status_message})
 
 
@@ -176,8 +162,6 @@ def get_loggedin_user_list():
         except:
             continue
 
-    # print('ACTIVE USERS:', active_users)
-    # print('times_users_requested ', times_users_requested)
     return list(set(active_users))
 
 
@@ -185,8 +169,6 @@ def get_loggedin_user_list():
 def create_user():
     new_username = request.headers.get('Username')
     new_password = request.headers.get('Password')
-    print("Making request to add this user-password pair to database:  \n",
-          new_username, new_password)
 
     if database_functions.check_username_availability(new_username):
         database_functions.add_user(new_username, new_password)
