@@ -17,4 +17,10 @@ I created a full-stack application that allows users to create profiles, log in 
 ### Server
 1. run 'pip install -r requirements.txt'
 
+<img src="Chat-App.png"><img>
 
+# <a href="https://chat-app-sdp2.onrender.com/"> TRY IT LIVE ON RENDER.COM<a>
+
+## Author 
+## Charles Brinkman
+<a href="https://www.linkedin.com/in/charlesbrinkman">LinkedIN<a>
