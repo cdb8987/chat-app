@@ -22,7 +22,7 @@ function LoginPage(props){
         };
     
         if(requestType === 'Login'){
-        return (fetch("https://chat-app-sdp2.onrender.com/login", requestOptions)
+        return (fetch(`${props.serverURL}/login`, requestOptions)
         .then(response => response.text())
         .then(result => JSON.parse(result))
         .then((result)=>{
@@ -35,7 +35,7 @@ function LoginPage(props){
         .catch(error => console.log('error', error)) 
         )}
         if(requestType === 'CreateUser'){
-            return (fetch("https://chat-app-sdp2.onrender.com/users", requestOptions)
+            return (fetch(`${props.serverURL}/users`, requestOptions)
         .then(response => response.json())
         .then((response) => {
             setserverReplyMessage(response['message'])

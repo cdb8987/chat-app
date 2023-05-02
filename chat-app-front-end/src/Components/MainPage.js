@@ -8,10 +8,10 @@ function MainPage(props){
     
 
     const logOut = ()=>{
-        return fetch("https://chat-app-sdp2.onrender.com/logout").then(()=> props.setLoginStatus(false))
+        return fetch(`${props.serverURL}/logout`).then(()=> props.setLoginStatus(false))
     }
     const updateActiveUsers = ()=>{
-        fetch("https://chat-app-sdp2.onrender.com/users")
+        fetch(`${props.serverURL}/users`)
         .then(response=> response.json())
         .then((response)=> {
             if(String(props.activeUsers) != String(response)){
@@ -37,7 +37,7 @@ function MainPage(props){
 
 
         return (
-            fetch("https://chat-app-sdp2.onrender.com/messages", requestOptions)
+            fetch(`${props.serverURL}/messages`, requestOptions)
             .then(response => response.text())
             .then(result => JSON.parse(result))
             .then((result)=>{
@@ -48,7 +48,7 @@ function MainPage(props){
         }
     
     const retrieveMessageFeed = ()=>{
-            fetch("https://chat-app-sdp2.onrender.com/messages")
+            fetch(`${props.serverURL}/messages`)
             .then(response=> response.json())
             .then((response)=>{
                 let message_feed = []

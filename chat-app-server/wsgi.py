@@ -80,119 +80,139 @@ def token_required(f):
 
 @app.post('/login')
 def login(is_unittest=False):
+    try:
+        if is_unittest:
+            submitted_username = 'TESTUSERNAME'
+            submitted_password = 'TESTPASSWORD'
+            expiration = '1682691346'
+        else:
+            submitted_username = request.headers.get('Username')
+            submitted_password = request.headers.get('Password')
+            expiration = datetime.datetime.utcnow()+datetime.timedelta(minutes=30)
 
-    if is_unittest:
-        submitted_username = 'TESTUSERNAME'
-        submitted_password = 'TESTPASSWORD'
-        expiration = '1682691346'
-    else:
-        submitted_username = request.headers.get('Username')
-        submitted_password = request.headers.get('Password')
-        expiration = datetime.datetime.utcnow()+datetime.timedelta(minutes=30)
+        if database_functions.verify_username_and_password(
+                submitted_username, submitted_password, is_unittest):
 
-    if database_functions.verify_username_and_password(
-            submitted_username, submitted_password, is_unittest):
+            access_token = jwt.encode(
+                {'user': submitted_username, 'exp': expiration}, app.config['SECRET_KEY'])
 
-        access_token = jwt.encode(
-            {'user': submitted_username, 'exp': expiration}, app.config['SECRET_KEY'])
+            clean_redundant_tokens(submitted_username)
+            generated_tokens_log.append(access_token)
 
-        clean_redundant_tokens(submitted_username)
-        generated_tokens_log.append(access_token)
+            response = jsonify({'login': True})
+            response.set_cookie('access_token', access_token,
+                                httponly=True)  # Set HttpOnly to True
 
-        response = jsonify({'login': True})
-        response.set_cookie('access_token', access_token,
-                            httponly=True)  # Set HttpOnly to True
-
-        return response, 200
-    else:
-        return jsonify({'message': 'That username/password combination does not match our records.'})
+            return response, 200
+        else:
+            return jsonify({'message': 'That username/password combination does not match our records.'})
+    except:
+        print('LOGIN FUNCTION FAILED')
 
 
 def clean_redundant_tokens(submitted_username):
-    for item in generated_tokens_log:
-        data = jwt.decode(item, app.config['SECRET_KEY'], ["HS256"])
-        print(generated_tokens_log)
-        print('Data is type', type(data))
-        if data['user'] == submitted_username:
-            print(item)
-            generated_tokens_log.remove(item)
+    try:
+        for item in generated_tokens_log:
+            data = jwt.decode(item, app.config['SECRET_KEY'], ["HS256"])
+            print(generated_tokens_log)
+            print('Data is type', type(data))
+            if data['user'] == submitted_username:
+                print(item)
+                generated_tokens_log.remove(item)
+    except:
+        print('clean_redundant_tokens function FAILED')
 
 
 @app.get('/logout')
 @token_required
 def logout():
-
-    token = request.cookies.get('access_token')
-    token_blacklist.append(token)
-    return jsonify({'message': 'your token is blacklisted and you are logged out'})
+    try:
+        token = request.cookies.get('access_token')
+        token_blacklist.append(token)
+        return jsonify({'message': 'your token is blacklisted and you are logged out'})
+    except:
+        print('LOGOUT function FAILED')
 
 
 @app.route("/")
 def index():
-
-    return send_from_directory(build_file_path, 'index.html')
+    try:
+        return send_from_directory(build_file_path, 'index.html')
+    except:
+        print('index function FAILED')
 
 
 @app.get("/messages")
 @token_required
 def retrieve_messages():
-    times_messages_requested = + 1
-    message_data = database_functions.retrieve_messages()
-    return jsonify(message_data)
+    try:
+        times_messages_requested = + 1
+        message_data = database_functions.retrieve_messages()
+        return jsonify(message_data)
+    except:
+        print('retrieve_messages function FAILED')
 
 
 @app.post("/messages")
 @token_required
 def write_message(is_unittest=False):
+    try:
+        token = request.cookies.get('access_token')
 
-    token = request.cookies.get('access_token')
+        if is_unittest:
+            data = jwt.decode(token, app.config['SECRET_KEY'], [
+                "HS256"], options={"verify_exp": False})
+            messagetext = 'TESTMESSAGE'
+        else:
+            data = jwt.decode(token, app.config['SECRET_KEY'], ["HS256"])
+            messagetext = request.headers.get('MessageText')
+            if messagetext == '':
+                return jsonify({'message': 'Messagetext cannot be blank.'})
 
-    if is_unittest:
-        data = jwt.decode(token, app.config['SECRET_KEY'], [
-            "HS256"], options={"verify_exp": False})
-        messagetext = 'TESTMESSAGE'
-    else:
-        data = jwt.decode(token, app.config['SECRET_KEY'], ["HS256"])
-        messagetext = request.headers.get('MessageText')
-        if messagetext == '':
-            return jsonify({'message': 'Messagetext cannot be blank.'})
+        username = data['user']
 
-    username = data['user']
+        database_functions.add_message(username, messagetext)
 
-    database_functions.add_message(username, messagetext)
-
-    status_message = f'writemessage function successfully executed. {username} wrote {messagetext} to the database.'
-    return jsonify({'message': status_message})
+        status_message = f'writemessage function successfully executed. {username} wrote {messagetext} to the database.'
+        return jsonify({'message': status_message})
+    except:
+        print('write_message function FAILED')
 
 
 @app.get("/users")
 @token_required
 def get_loggedin_user_list():
-    active_users = []
-    for i in generated_tokens_log:
-        try:
-            valid_user = jwt.decode(i, app.config['SECRET_KEY'], ["HS256"])
-            if i not in token_blacklist:
-                active_users.append(valid_user['user'])
-        except:
-            continue
 
-    return list(set(active_users))
+    try:
+        active_users = []
+        for i in generated_tokens_log:
+            try:
+                valid_user = jwt.decode(i, app.config['SECRET_KEY'], ["HS256"])
+                if i not in token_blacklist:
+                    active_users.append(valid_user['user'])
+            except:
+                continue
+
+        return list(set(active_users))
+    except:
+        print('get_loggedin_user_list FAILED')
 
 
 @app.post("/users")
 def create_user():
-    new_username = request.headers.get('Username')
-    new_password = request.headers.get('Password')
-    if new_username == '' or new_password == '':
-        return jsonify({'message': 'Both Username and Password Fields must contain a value.'})
+    try:
+        new_username = request.headers.get('Username')
+        new_password = request.headers.get('Password')
+        if new_username == '' or new_password == '':
+            return jsonify({'message': 'Both Username and Password Fields must contain a value.'})
 
-    if database_functions.check_username_availability(new_username):
-        database_functions.add_user(new_username, new_password)
-        return jsonify({'message': 'New User Created'})
-    else:
-        print('USER NOT ADDED.  CONFLICT')
-        return jsonify({'message': 'USER NOT ADDED.  THIS USERNAME IS NOT AVAILABLE. '})
-
+        if database_functions.check_username_availability(new_username):
+            database_functions.add_user(new_username, new_password)
+            return jsonify({'message': 'New User Created'})
+        else:
+            print('USER NOT ADDED.  CONFLICT')
+            return jsonify({'message': 'USER NOT ADDED.  THIS USERNAME IS NOT AVAILABLE. '})
+    except:
+        print('create_user function FAILED')
 
 # app.run(debug=True)

@@ -1,70 +1,20 @@
-# Getting Started with Create React App
+# Chat App
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+## Description
 
-## Available Scripts
+I created a full-stack application that allows users to create profiles, log in and write messages to each other.  Users can see who else is online and see the message history updated instantly as other users make changes and log in/out.  The purpose of this app was to build, configure and deploy a full stack app (front end, server, database) on hosted platform which allows remote users to interact in real time.  
 
-In the project directory, you can run:
+    1.  FRONT END.  Stack used used is React, Javascript, NPM, NPM, Bootstrap, HTML and CSS. The page is structured as a SPA (single page application) with a Login and Mainpage Component which changes based on login status.     
+    2.  SERVER.  Stack used is Python 3.10 and Flask 2.3.  Server routes are established for login functions.  Upon successful login, the requesting client receives a JWT token in their HTTPonly Cookies.  GET/POST requests (for user and message data) are checked by a python decorator which will only allow data retreival if JWT token exists, is not expired, and has not been added to the blacklist.  Logging out adds unexpired JWT tokens to a token blacklist.  
+    3.DATABASE  This app uses a PostGres SQL Database for storing user login information (usernames, passwords, etc) as well as messages and their creators.  The database is accessed directly via external URL connection from the Flask Server.  
 
-### `npm start`
+## Installation Instructions
+### Client
+1. run 'cd chat-app-front-end'
+2. run 'npm install'
+3. run 'npm run build'
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+### Server
+1. run 'pip install -r requirements.txt'
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
 
-### `npm test`
-
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
-
-### `npm run build`
-
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
-
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
-
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `npm run eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
-
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
-
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
