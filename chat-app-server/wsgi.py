@@ -95,14 +95,27 @@ def login(is_unittest=False):
 
         access_token = jwt.encode(
             {'user': submitted_username, 'exp': expiration}, app.config['SECRET_KEY'])
+
+        clean_redundant_tokens(submitted_username)
         generated_tokens_log.append(access_token)
 
         response = jsonify({'login': True})
         response.set_cookie('access_token', access_token,
                             httponly=True)  # Set HttpOnly to True
+
         return response, 200
     else:
         return jsonify({'message': 'That username/password combination does not match our records.'})
+
+
+def clean_redundant_tokens(submitted_username):
+    for item in generated_tokens_log:
+        data = jwt.decode(item, app.config['SECRET_KEY'], ["HS256"])
+        print(generated_tokens_log)
+        print('Data is type', type(data))
+        if data['user'] == submitted_username:
+            print(item)
+            generated_tokens_log.remove(item)
 
 
 @app.get('/logout')
@@ -141,6 +154,8 @@ def write_message(is_unittest=False):
     else:
         data = jwt.decode(token, app.config['SECRET_KEY'], ["HS256"])
         messagetext = request.headers.get('MessageText')
+        if messagetext == '':
+            return jsonify({'message': 'Messagetext cannot be blank.'})
 
     username = data['user']
 
@@ -169,6 +184,8 @@ def get_loggedin_user_list():
 def create_user():
     new_username = request.headers.get('Username')
     new_password = request.headers.get('Password')
+    if new_username == '' or new_password == '':
+        return jsonify({'message': 'Both Username and Password Fields must contain a value.'})
 
     if database_functions.check_username_availability(new_username):
         database_functions.add_user(new_username, new_password)
