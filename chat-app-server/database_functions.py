@@ -46,6 +46,17 @@ def create_tables():
         print('create_tables function FAILED')
 
 
+def add_channel(username, channel_name):
+    try:
+        connection = access_database()
+        cur, conn, createddate = connection[0], connection[1], connection[2]
+        sql = 'INSERT INTO channels (channel_name) VALUES (%s)'
+        cur.execute(sql, (channel_name,))
+        disconnect_from_database(cur, conn)
+    except:
+        print('add_channel function FAILED')
+
+
 def add_message(username, messagetext, channel_id=1):
     try:
         connection = access_database()
