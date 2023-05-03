@@ -52,10 +52,11 @@ function MainPage(props){
             .then(response=> response.json())
             .then((response)=>{
                 let message_feed = []
-                // {name: 'Charlie', time: '9:00am', message: 'Hey whats up guys?'}
+                console.log('WHOLE RESPONSE : ', response)
                 for(let i=0; i < response.length; i++ ){
                     const entry = {name: response[i][4], time: response[i][3], message: response[i][2]}
                     message_feed.push(entry)
+                    console.log('RESPONSE[i] INSIDE LOOP', response[i])
                 }
                 props.setMessageFeed(message_feed)
                 return message_feed

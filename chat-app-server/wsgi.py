@@ -148,7 +148,9 @@ def retrieve_messages():
     try:
         times_messages_requested = + 1
         message_data = database_functions.retrieve_messages()
+        print(message_data)
         return jsonify(message_data)
+        # returns data type: <class 'flask.wrappers.Response'>
     except:
         print('retrieve_messages function FAILED')
 

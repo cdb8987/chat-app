@@ -5,19 +5,19 @@ from flask import jsonify
 import hosted_database_connection
 
 
-access_database = hosted_database_connection.access_database
+# access_database = hosted_database_connection.access_database
 # CODE BELOW FOR LOCAL POSTGRES CONNECTION ONLY
-# def access_database():
-#     createddate = datetime.date.today()
+def access_database():
+    createddate = datetime.date.today()
 
-#     conn = psycopg2.connect(
-#         host="localhost",
-#         database="chat_app",
-#         user='charlie',
-#         password='password')
+    conn = psycopg2.connect(
+        host="localhost",
+        database="chat_app",
+        user='charlie',
+        password='password')
 
-#     cur = conn.cursor()
-#     return [cur, conn, createddate]
+    cur = conn.cursor()
+    return [cur, conn, createddate]
 
 
 def disconnect_from_database(cur, conn):
@@ -125,11 +125,11 @@ def retrieve_messages():
         connection = access_database()
         cur, conn = connection[0], connection[1]
         cur.execute(
-            'SELECT messages.*, users.username FROM messages JOIN users ON messages.userid = users.user_id')
+            'SELECT messages.referenceid, messages.userid, messages.messagetext, messages.createddate, users.username FROM messages JOIN users ON messages.userid = users.user_id')
 
         messages = cur.fetchall()
         disconnect_from_database(cur, conn)
-
         return messages
+        # returns type 'list'
     except:
         print('retrieve_messages function FAILED')
