@@ -38,6 +38,7 @@ function App() {
   if(logInStatus === true){
     return (
       <MainPage UsersOnline={dummyUsersOnline} messageFeed={messageFeed} setMessageFeed={setMessageFeed} setLoginStatus={setLoginStatus} activeUsers={activeUsers} setActiveUsers={setActiveUsers} serverURL={serverURL}/>
+     
     )
   }
 
@@ -45,8 +46,8 @@ function App() {
   
   return (
     <div>
-
-      <LoginPage updatelogin={setLoginStatus} serverURL={serverURL} />
+      <MainPage UsersOnline={dummyUsersOnline} messageFeed={messageFeed} setMessageFeed={setMessageFeed} setLoginStatus={setLoginStatus} activeUsers={activeUsers} setActiveUsers={setActiveUsers} serverURL={serverURL}/>
+      {/* <LoginPage updatelogin={setLoginStatus} serverURL={serverURL} /> */}
        
        
     </div>

@@ -96,7 +96,13 @@ function MainPage(props){
                 <div className="pagediv" style={{display: 'flex'}}>
                     <div className="userbar" style={{flexBasis: '33.33%', borderRightColor: 'lightgrey', borderRightStyle: 'solid'}}>
                         <div className="container p-3 my-3 border" style={{textAlign: 'center'}}>
-                            ONLINE NOW
+                            <button className="btn btn-outline-primary">Online Now</button>
+                            <button className="btn btn-outline-primary">Friends</button>
+                            <button className="btn btn-outline-primary">Channels</button>
+                            
+                            
+                            
+
                                                 
                         </div>
                         <div className="userdata">{UserData}
@@ -104,9 +110,10 @@ function MainPage(props){
                     </div>
                     <div className="messagefeed" style={{flexBasis: '66.66%'}}>
                         <div className="container p-3 my-3 border" style={{textAlign: 'center'}}>
-                                MESSAGES
+                            <button className="btn btn-light">Feed</button>
+                            <button className="btn btn-light">Direct Messages</button>
                         
-                                <button style={{float: 'right'}}onClick={()=> {logOut()}}>Log Out</button>
+                                <button className='btn btn-secondary' style={{float: 'right'}}onClick={()=> {logOut()}}>Log Out</button>
                         </div>
 
                         <div style={{height: '70%', overflow:'auto'}}>
