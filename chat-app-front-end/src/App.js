@@ -31,13 +31,14 @@ function App() {
   let [logInStatus, setLoginStatus] = useState(loggedIn)
   let [messageFeed, setMessageFeed] = useState(dummyMessageFeed)
   let [activeUsers, setActiveUsers] = useState(dummyUsersOnline)
+  let [channels, setChannels] = useState(['general', 'coding'])
   // let [activeUsers, setActiveUsers] = useState(dummyUsersOnline)
 
   
   
   if(logInStatus === true){
     return (
-      <MainPage UsersOnline={dummyUsersOnline} messageFeed={messageFeed} setMessageFeed={setMessageFeed} setLoginStatus={setLoginStatus} activeUsers={activeUsers} setActiveUsers={setActiveUsers} serverURL={serverURL}/>
+      <MainPage UsersOnline={dummyUsersOnline} messageFeed={messageFeed} setMessageFeed={setMessageFeed} setLoginStatus={setLoginStatus} activeUsers={activeUsers} setActiveUsers={setActiveUsers} serverURL={serverURL} channels={channels} setChannels={setChannels}/>
      
     )
   }

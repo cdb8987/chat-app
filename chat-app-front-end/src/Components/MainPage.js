@@ -93,6 +93,15 @@ function MainPage(props){
         </div>
         
     )
+    let Channellist = (
+        <div>
+            {props.channels.map(item=> (
+            <div><button type="button" class="btn btn-outline-dark">{item} </button>  
+            
+            </div>
+            ))}
+        </div>
+    )
 
     
     return (
@@ -102,14 +111,12 @@ function MainPage(props){
                         <div className="container p-3 my-3 border" style={{textAlign: 'center'}}>
                             <button className="btn btn-outline-primary">Online Now</button>
                             <button className="btn btn-outline-primary">Friends</button>
-                            <button className="btn btn-outline-primary">Channels</button>
-                            
-                            
-                            
-                            
-                                                
+                            <button className="btn btn-outline-primary">Channels</button>                       
                         </div>
                         <div className="userdata">{UserData}
+                        </div>
+                        <div classname="channellist">
+                            {Channellist}
                         </div>
                     </div>
                     <div className="messagefeed" style={{flexBasis: '66.66%'}}>
