@@ -52,7 +52,7 @@ function MainPage(props){
         }
     
     const retrieveMessageFeed = ()=>{
-            fetch(`${props.serverURL}/messages`)
+            fetch(`${props.serverURL}/messages?ChannelId=${channelId}`)
             .then(response=> response.json())
             .then((response)=>{
                 let message_feed = []

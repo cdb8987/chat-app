@@ -146,8 +146,9 @@ def index():
 @token_required
 def retrieve_messages():
     try:
-        sql = 'SELECT messages.referenceid, messages.userid, messages.messagetext, messages.createddate, users.username FROM messages JOIN users ON messages.userid = users.user_id'
-        values = None
+        channel_id = request.args.get('ChannelId')
+        sql = 'SELECT messages.referenceid, messages.userid, messages.messagetext, messages.createddate, users.username FROM messages JOIN users ON messages.userid = users.user_id WHERE channel_id = %s'
+        values = (channel_id,)
         message_data = database_functions.retrieve_messages(sql, values)
         # print(message_data)
         return jsonify(message_data)
