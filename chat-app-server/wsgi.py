@@ -147,6 +147,7 @@ def index():
 def retrieve_messages():
     try:
         channel_id = request.args.get('ChannelId')
+        print(channel_id)
         sql = 'SELECT messages.referenceid, messages.userid, messages.messagetext, messages.createddate, users.username FROM messages JOIN users ON messages.userid = users.user_id WHERE channel_id = %s'
         values = (channel_id,)
         message_data = database_functions.retrieve_messages(sql, values)
@@ -224,5 +225,18 @@ def create_user():
     except:
         print('create_user function FAILED')
 
+
+@app.get("/channels")
+@token_required
+def retrieve_channels():
+    try:
+
+        sql = 'SELECT channel_id, channel_name FROM channels'
+        values = None
+        channel_data = database_functions.retrieve_messages(sql, values)
+        return jsonify(channel_data)
+
+    except:
+        print('retrieve_messages function FAILED')
 
 # app.run(debug=True)

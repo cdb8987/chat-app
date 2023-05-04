@@ -5,7 +5,7 @@ function MainPage(props){
 
     let [sendMessageText, setSendMessageText] = useState('')
     const [count, setCount] = useState(0);
-    const [channelId, setChannelID] = useState(1)
+    // const [channelId, setChannelID] = useState(1)
     const [messageFeedSelection, setMessageFeedSelection] = useState('channels')
     
 
@@ -23,11 +23,22 @@ function MainPage(props){
         })
     }
 
+    const updateChannellist = ()=>{
+        fetch(`${props.serverURL}/channels`)
+        .then(response=> response.json())
+        .then((response)=> {
+            if(String(props.activeUsers) != String(response)){
+                props.setChannels(response)
+            }
+            
+        })
+    }
+
     const writeMessage = (MessageText)=>{
         const myHeaders = new Headers();
         
         myHeaders.append("MessageText", MessageText);
-        myHeaders.append("ChannelId", channelId)
+        myHeaders.append("ChannelId", props.channelId)
         
         
     
@@ -52,15 +63,15 @@ function MainPage(props){
         }
     
     const retrieveMessageFeed = ()=>{
-            fetch(`${props.serverURL}/messages?ChannelId=${channelId}`)
+            fetch(`${props.serverURL}/messages?ChannelId=${props.channelId}`)
             .then(response=> response.json())
             .then((response)=>{
                 let message_feed = []
-                // console.log('WHOLE RESPONSE : ', response)
+                
                 for(let i=0; i < response.length; i++ ){
                     const entry = {name: response[i][4], time: response[i][3], message: response[i][2]}
                     message_feed.push(entry)
-                    // console.log('RESPONSE[i] INSIDE LOOP', response[i])
+                    
                 }
                 props.setMessageFeed(message_feed)
                 return message_feed
@@ -70,7 +81,7 @@ function MainPage(props){
     
     useEffect(()=> {
         const interval = setInterval(()=>{setCount(count => count + 1); updateActiveUsers();
-            retrieveMessageFeed()}, 1000);
+            retrieveMessageFeed(); updateChannellist()}, 1000);
         return ()=>{clearInterval(interval)}
     }, [])
     
@@ -96,7 +107,7 @@ function MainPage(props){
     let Channellist = (
         <div>
             {props.channels.map(item=> (
-            <div><button type="button" class="btn btn-outline-dark">{item} </button>  
+            <div><button type="button" class="btn btn-outline-dark" onClick={()=> {props.setChannelID(item[0]); console.log('setChannelID executed with value:', item[0]); console.log('channelID is:', props.channelId)}}>{item[1]} </button>  
             
             </div>
             ))}

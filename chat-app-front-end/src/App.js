@@ -32,13 +32,14 @@ function App() {
   let [messageFeed, setMessageFeed] = useState(dummyMessageFeed)
   let [activeUsers, setActiveUsers] = useState(dummyUsersOnline)
   let [channels, setChannels] = useState(['general', 'coding'])
+  let [channelId, setChannelID] = useState(1)
   // let [activeUsers, setActiveUsers] = useState(dummyUsersOnline)
 
-  
+  console.log('APP.JS RENDERED')
   
   if(logInStatus === true){
     return (
-      <MainPage UsersOnline={dummyUsersOnline} messageFeed={messageFeed} setMessageFeed={setMessageFeed} setLoginStatus={setLoginStatus} activeUsers={activeUsers} setActiveUsers={setActiveUsers} serverURL={serverURL} channels={channels} setChannels={setChannels}/>
+      <MainPage UsersOnline={dummyUsersOnline} messageFeed={messageFeed} setMessageFeed={setMessageFeed} setLoginStatus={setLoginStatus} activeUsers={activeUsers} setActiveUsers={setActiveUsers} serverURL={serverURL} channels={channels} setChannels={setChannels} channelId={channelId} setChannelID={setChannelID}/>
      
     )
   }
