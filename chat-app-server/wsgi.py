@@ -146,9 +146,10 @@ def index():
 @token_required
 def retrieve_messages():
     try:
-        times_messages_requested = + 1
-        message_data = database_functions.retrieve_messages()
-        print(message_data)
+        sql = 'SELECT messages.referenceid, messages.userid, messages.messagetext, messages.createddate, users.username FROM messages JOIN users ON messages.userid = users.user_id'
+        values = None
+        message_data = database_functions.retrieve_messages(sql, values)
+        # print(message_data)
         return jsonify(message_data)
         # returns data type: <class 'flask.wrappers.Response'>
     except:
@@ -165,15 +166,20 @@ def write_message(is_unittest=False):
             data = jwt.decode(token, app.config['SECRET_KEY'], [
                 "HS256"], options={"verify_exp": False})
             messagetext = 'TESTMESSAGE'
+
         else:
             data = jwt.decode(token, app.config['SECRET_KEY'], ["HS256"])
             messagetext = request.headers.get('MessageText')
+            Channel_id = str(request.headers.get('ChannelId'))
             if messagetext == '':
                 return jsonify({'message': 'Messagetext cannot be blank.'})
+            print(request.headers)
+            print('messagetext is: ', messagetext,
+                  'Channel_id is:', Channel_id, 'Channel_id type is: ', type(Channel_id))
 
         username = data['user']
 
-        database_functions.add_message(username, messagetext)
+        database_functions.add_message(username, messagetext, Channel_id)
 
         status_message = f'writemessage function successfully executed. {username} wrote {messagetext} to the database.'
         return jsonify({'message': status_message})

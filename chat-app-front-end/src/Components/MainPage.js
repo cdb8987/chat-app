@@ -5,6 +5,8 @@ function MainPage(props){
 
     let [sendMessageText, setSendMessageText] = useState('')
     const [count, setCount] = useState(0);
+    const [channelId, setChannelID] = useState(1)
+    const [messageFeedSelection, setMessageFeedSelection] = useState('channels')
     
 
     const logOut = ()=>{
@@ -23,8 +25,11 @@ function MainPage(props){
 
     const writeMessage = (MessageText)=>{
         const myHeaders = new Headers();
-    
+        
         myHeaders.append("MessageText", MessageText);
+        myHeaders.append("ChannelId", channelId)
+        
+        
     
         const raw = "";
 
@@ -34,7 +39,6 @@ function MainPage(props){
         body: raw,
         redirect: 'follow'
         };
-
 
         return (
             fetch(`${props.serverURL}/messages`, requestOptions)
@@ -52,11 +56,11 @@ function MainPage(props){
             .then(response=> response.json())
             .then((response)=>{
                 let message_feed = []
-                console.log('WHOLE RESPONSE : ', response)
+                // console.log('WHOLE RESPONSE : ', response)
                 for(let i=0; i < response.length; i++ ){
                     const entry = {name: response[i][4], time: response[i][3], message: response[i][2]}
                     message_feed.push(entry)
-                    console.log('RESPONSE[i] INSIDE LOOP', response[i])
+                    // console.log('RESPONSE[i] INSIDE LOOP', response[i])
                 }
                 props.setMessageFeed(message_feed)
                 return message_feed
@@ -102,14 +106,14 @@ function MainPage(props){
                             
                             
                             
-
+                            
                                                 
                         </div>
                         <div className="userdata">{UserData}
                         </div>
                     </div>
                     <div className="messagefeed" style={{flexBasis: '66.66%'}}>
-                        <div className="container p-3 my-3 border" style={{textAlign: 'center'}}>
+                        <div  className="container p-3 my-3 border" style={{textAlign: 'center'}}>
                             <button className="btn btn-light">Feed</button>
                             <button className="btn btn-light">Direct Messages</button>
                         

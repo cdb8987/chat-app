@@ -57,16 +57,16 @@ def add_channel(username, channel_name):
         print('add_channel function FAILED')
 
 
-def add_message(username, messagetext, channel_id=1):
+def add_message(username, messagetext, Channel_id=1):
     try:
         connection = access_database()
         cur, conn, createddate = connection[0], connection[1], connection[2]
         cur.execute(
             'SELECT user_id from users where username = %s', (username, ))
         user_id = cur.fetchone()[0]
-        cur.execute('INSERT INTO messages (userid, messagetext, createddate)'
-                    'VALUES (%s, %s, %s)',
-                    (user_id, messagetext, createddate))
+        cur.execute('INSERT INTO messages (userid, messagetext, createddate, channel_id)'
+                    'VALUES (%s, %s, %s, %s)',
+                    (user_id, messagetext, createddate, Channel_id))
 
         disconnect_from_database(cur, conn)
         return jsonify({'response': f'message ({messagetext}) added to database'})
@@ -131,12 +131,11 @@ def verify_username_and_password(username, password, is_unittest):
         print('verify_username_and_password function FAILED')
 
 
-def retrieve_messages():
+def retrieve_messages(sql, values):
     try:
         connection = access_database()
         cur, conn = connection[0], connection[1]
-        cur.execute(
-            'SELECT messages.referenceid, messages.userid, messages.messagetext, messages.createddate, users.username FROM messages JOIN users ON messages.userid = users.user_id')
+        cur.execute(sql, values)
 
         messages = cur.fetchall()
         disconnect_from_database(cur, conn)

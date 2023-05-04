@@ -46,8 +46,8 @@ function App() {
   
   return (
     <div>
-      <MainPage UsersOnline={dummyUsersOnline} messageFeed={messageFeed} setMessageFeed={setMessageFeed} setLoginStatus={setLoginStatus} activeUsers={activeUsers} setActiveUsers={setActiveUsers} serverURL={serverURL}/>
-      {/* <LoginPage updatelogin={setLoginStatus} serverURL={serverURL} /> */}
+      {/* <MainPage UsersOnline={dummyUsersOnline} messageFeed={messageFeed} setMessageFeed={setMessageFeed} setLoginStatus={setLoginStatus} activeUsers={activeUsers} setActiveUsers={setActiveUsers} serverURL={serverURL}/> */}
+      <LoginPage updatelogin={setLoginStatus} serverURL={serverURL} />
        
        
     </div>
