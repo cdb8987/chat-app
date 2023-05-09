@@ -11,7 +11,8 @@ import { useState } from 'react';
 
 
 
-let loggedIn = false
+
+debugger
 
 function App() {
 
@@ -25,25 +26,38 @@ function App() {
   const serverURL = 'http://127.0.0.1:5000/'
 
 
+  
+  let startingLogInStatus = false
 
-
-  let [logInStatus, setLoginStatus] = useState(loggedIn)
+  try{
+    if(Boolean(sessionStorage.getItem('logInStatus')) === true){
+      console.log(typeof sessionStorage.getItem('logInStatus'), sessionStorage.getItem('logInStatus'))
+      startingLogInStatus = true
+    }
+    else{console.log(typeof sessionStorage.getItem('logInStatus'), sessionStorage.getItem('logInStatus'))}
+  }
+  catch(error){console.log(error)}
+  
+  
+  let [logInStatus, setLoginStatus] = useState(startingLogInStatus)
   let [messageFeed, setMessageFeed] = useState(dummyMessageFeed)
   let [activeUsers, setActiveUsers] = useState(dummyUsersOnline)
   let [channels, setChannels] = useState(['general', 'coding'])
 
+  
+
+  
   let channelId;
     if(sessionStorage.getItem('channelId')){
         channelId = sessionStorage.getItem('channelId');
-        console.log('channelId from session storage used.  ', channelId)
       }
-    else{ channelId = 1; sessionStorage.setItem('channelId', channelId)
-console.log('channelId reset to 1')}
+    else{ channelId = 1; sessionStorage.setItem('channelId', channelId)}
   
 
   console.log('APP.JS RENDERED')
   
   if(logInStatus === true){
+    console.log('logInStatus is true')
     return (
       <MainPage UsersOnline={dummyUsersOnline} messageFeed={messageFeed} setMessageFeed={setMessageFeed} setLoginStatus={setLoginStatus} activeUsers={activeUsers} setActiveUsers={setActiveUsers} serverURL={serverURL} channels={channels} setChannels={setChannels} channelId={channelId} />
      
@@ -55,7 +69,7 @@ console.log('channelId reset to 1')}
   return (
     <div>
       {/* <MainPage UsersOnline={dummyUsersOnline} messageFeed={messageFeed} setMessageFeed={setMessageFeed} setLoginStatus={setLoginStatus} activeUsers={activeUsers} setActiveUsers={setActiveUsers} serverURL={serverURL}/> */}
-      <LoginPage updatelogin={setLoginStatus} serverURL={serverURL} />
+      <LoginPage setLoginStatus={setLoginStatus} serverURL={serverURL} />
        
        
     </div>

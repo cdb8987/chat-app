@@ -25,6 +25,7 @@ function MainPage(props){
     
 
     const logOut = ()=>{
+        sessionStorage.setItem('logInStatus', false) 
         return fetch(`${props.serverURL}/logout`).then(()=> props.setLoginStatus(false))
     }
     const updateActiveUsers = ()=>{
