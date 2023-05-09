@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import UserData from './UserData';
 import MessageFeed from './MessageFeed';
+import ChannelList from './ChannelList';
 
 function MainPage(props){
     
@@ -87,29 +88,6 @@ function MainPage(props){
         return ()=>{clearInterval(interval)}
     }, [])
     
-    // let MessageData = (
-    //     <div>
-    //         {props.messageFeed.map(item=> (
-    //         <div><strong>{item.name}</strong> {item.time}   
-    //         <div>
-    //             <p style={{border:'gray', borderStyle:'solid', borderRadius:'5px'}}>{item.message}</p>
-    //             </div>
-    //         </div>
-    //         ))}
-    //     </div>
-        
-    // )
-    let Channellist = (
-        <div>
-            {props.channels.map(item=> (
-            <div><button type="button" class="btn btn-outline-dark" onClick={()=> {updateChannelId(item[0]); updateMessageFeed(); console.log('setChannelID executed with value:', item[0]); console.log('channelID in sessionstorage is:', sessionStorage.getItem('channelId')); }}>{item[1]} </button>  
-            
-            </div>
-            ))}
-        </div>
-    )
-
-    
     return (
         <div className="page">
                 <div className="pagediv" style={{display: 'flex'}}>
@@ -120,25 +98,23 @@ function MainPage(props){
                             <button className="btn btn-outline-primary">Channels</button>                       
                         </div>
                         <UserData activeUsers={props.activeUsers}/>
-                        <div classname="channellist">
-                            {Channellist}
-                        </div>
+                        <ChannelList channels={props.channels} updateChannelId={updateChannelId} updateMessageFeed={updateMessageFeed}/>
                     </div>
-                    {/* <div className="messagefeed" style={{flexBasis: '66.66%'}}>
-                        <div  className="container p-3 my-3 border" style={{textAlign: 'center'}}>
+                    <div className="messagefeed" style={{flexBasis: '66.66%'}}>
+                    <div  className="container p-3 my-3 border" style={{textAlign: 'center'}}>
                             <button className="btn btn-light">Feed</button>
                             <button className="btn btn-light">Direct Messages</button>
                         
-                                <button className='btn btn-secondary' style={{float: 'right'}}onClick={()=> {logOut()}}>Log Out</button>
-                        </div>
+                            <button className='btn btn-secondary' style={{float: 'right'}}onClick={()=> {props.logOut()}}>Log Out</button>
+                    </div>
 
-                        <div style={{height: '70%', overflow:'auto'}}>
-                        {MessageData}
-                        </div>
+                    <div style={{height: '70%', overflow:'auto'}}>
+                        <MessageFeed messageFeed={props.messageFeed} />
+                    </div>
                         
-                        <div><button className="btn btn-primary" onClick={()=> {writeMessage(sendMessageText); setSendMessageText(''); updateActiveUsers();updateMessageFeed() }}  >Send Message</button><input style={{width:"100%"}}value={sendMessageText} onChange={(e) => setSendMessageText(e.target.value)} required></input></div>
-                    </div> */}
-                    <MessageFeed messageFeed={props.messageFeed} logOut={logOut} writeMessage={writeMessage} sendMessageText={sendMessageText} setSendMessageText={setSendMessageText} updateActiveUsers={updateActiveUsers} updateMessageFeed={updateMessageFeed}/>
+                    <div><button className="btn btn-primary" onClick={()=> {writeMessage(sendMessageText); setSendMessageText(''); updateActiveUsers(); updateMessageFeed() }}  >Send Message</button><input style={{width:"100%"}}value={sendMessageText} onChange={(e) => setSendMessageText(e.target.value)} required></input>
+                    </div>
+                    </div>
                     
                     
                 </div>
