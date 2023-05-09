@@ -51,6 +51,12 @@ function MainPage(props){
         sessionStorage.setItem('logInStatus', false) 
         return fetch(`${props.serverURL}/logout`).then(()=> props.setLoginStatus(false))
     }
+    const handleSend = ()=>{
+        writeMessage(sendMessageText); 
+        setSendMessageText(''); 
+        updateActiveUsers(); 
+        updateMessageFeed()
+    }
 
     const writeMessage = (MessageText)=>{
         const myHeaders = new Headers();
@@ -105,14 +111,14 @@ function MainPage(props){
                             <button className="btn btn-light">Feed</button>
                             <button className="btn btn-light">Direct Messages</button>
                         
-                            <button className='btn btn-secondary' style={{float: 'right'}}onClick={()=> {props.logOut()}}>Log Out</button>
+                            <button className='btn btn-secondary' style={{float: 'right'}}onClick={()=> {logOut()}}>Log Out</button>
                     </div>
 
                     <div style={{height: '70%', overflow:'auto'}}>
                         <MessageFeed messageFeed={props.messageFeed} />
                     </div>
                         
-                    <div><button className="btn btn-primary" onClick={()=> {writeMessage(sendMessageText); setSendMessageText(''); updateActiveUsers(); updateMessageFeed() }}  >Send Message</button><input style={{width:"100%"}}value={sendMessageText} onChange={(e) => setSendMessageText(e.target.value)} required></input>
+                    <div><form novalidate><button className="btn btn-primary" onClick={handleSend}  >Send Message</button><input onSubmit={handleSend} style={{width:"100%"}}value={sendMessageText} onChange={(e) => setSendMessageText(e.target.value)} required></input></form>
                     </div>
                     </div>
                     
