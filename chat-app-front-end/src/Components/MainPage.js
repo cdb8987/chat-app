@@ -1,32 +1,23 @@
 import React, { useEffect, useState } from 'react';
+import UserData from './UserData';
 
 function MainPage(props){
     
 
     let [sendMessageText, setSendMessageText] = useState('')
-    const [count, setCount] = useState(0);
-    const [messageFeedSelection, setMessageFeedSelection] = useState('channels')
-    
-    
-//     let channelId;
-//     if(sessionStorage.getItem('channelId')){
-//         channelId = sessionStorage.getItem('channelId');
-//         console.log('channelId from session storage used.  ', channelId)
-//       }
-//     else{ channelId = 1; sessionStorage.setItem('channelId', channelId)
-// console.log('channelId reset to 1')}
-
-    
-    
-      const updateChannelId = (channelId)=>{
-        sessionStorage.setItem('channelId', channelId)
-        
+    const [count, setCount] = useState(0); 
+    const updateChannellist = ()=>{
+        fetch(`${props.serverURL}/channels`)
+        .then(response=> response.json())
+        .then((response)=> {
+            if(String(props.activeUsers) != String(response)){
+                props.setChannels(response)
+            }
+            
+        })
     }
-    
-
-    const logOut = ()=>{
-        sessionStorage.setItem('logInStatus', false) 
-        return fetch(`${props.serverURL}/logout`).then(()=> props.setLoginStatus(false))
+    const updateChannelId = (channelId)=>{
+        sessionStorage.setItem('channelId', channelId)  
     }
     const updateActiveUsers = ()=>{
         fetch(`${props.serverURL}/users`)
@@ -38,16 +29,25 @@ function MainPage(props){
             
         })
     }
-
-    const updateChannellist = ()=>{
-        fetch(`${props.serverURL}/channels`)
+    const updateMessageFeed = ()=>{
+        fetch(`${props.serverURL}/messages?ChannelId=${sessionStorage.getItem('channelId')}`)
         .then(response=> response.json())
-        .then((response)=> {
-            if(String(props.activeUsers) != String(response)){
-                props.setChannels(response)
-            }
+        .then((response)=>{
+            let message_feed = []
             
+            for(let i=0; i < response.length; i++ ){
+                const entry = {name: response[i][4], time: response[i][3], message: response[i][2]}
+                message_feed.push(entry)
+                
+            }
+            props.setMessageFeed(message_feed)
+            return message_feed
         })
+        .catch(error => console.log('error', error))
+}
+    const logOut = ()=>{
+        sessionStorage.setItem('logInStatus', false) 
+        return fetch(`${props.serverURL}/logout`).then(()=> props.setLoginStatus(false))
     }
 
     const writeMessage = (MessageText)=>{
@@ -72,41 +72,26 @@ function MainPage(props){
             .then(response => response.text())
             .then(result => JSON.parse(result))
             .then((result)=>{
-            retrieveMessageFeed();
+                updateMessageFeed();
             if(result['login']=== true){props.updatelogin(true)}
             }
             ))
         }
     
-    const retrieveMessageFeed = ()=>{
-            fetch(`${props.serverURL}/messages?ChannelId=${sessionStorage.getItem('channelId')}`)
-            .then(response=> response.json())
-            .then((response)=>{
-                let message_feed = []
-                
-                for(let i=0; i < response.length; i++ ){
-                    const entry = {name: response[i][4], time: response[i][3], message: response[i][2]}
-                    message_feed.push(entry)
-                    
-                }
-                props.setMessageFeed(message_feed)
-                return message_feed
-            })
-            .catch(error => console.log('error', error))
-    }
+    
     
     useEffect(()=> {
         const interval = setInterval(()=>{setCount(count => count + 1); updateActiveUsers();
-            retrieveMessageFeed(); updateChannellist()}, 1000);
+            updateMessageFeed(); updateChannellist()}, 1000);
         return ()=>{clearInterval(interval)}
     }, [])
     
  
-    let UserData = (
-        <div>
-            {props.activeUsers.map(item=>(<p>🟢{item}</p>))}
-        </div>
-    )
+    // let UserData = props.activeusers ? (
+    //     <div>
+    //         {props.activeUsers.map(item=>(<p>🟢{item}</p>))}
+    //     </div>
+    // ) : null
     
     let MessageData = (
         <div>
@@ -123,7 +108,7 @@ function MainPage(props){
     let Channellist = (
         <div>
             {props.channels.map(item=> (
-            <div><button type="button" class="btn btn-outline-dark" onClick={()=> {updateChannelId(item[0]); retrieveMessageFeed(); console.log('setChannelID executed with value:', item[0]); console.log('channelID in sessionstorage is:', sessionStorage.getItem('channelId')); }}>{item[1]} </button>  
+            <div><button type="button" class="btn btn-outline-dark" onClick={()=> {updateChannelId(item[0]); updateMessageFeed(); console.log('setChannelID executed with value:', item[0]); console.log('channelID in sessionstorage is:', sessionStorage.getItem('channelId')); }}>{item[1]} </button>  
             
             </div>
             ))}
@@ -140,8 +125,9 @@ function MainPage(props){
                             <button className="btn btn-outline-primary">Friends</button>
                             <button className="btn btn-outline-primary">Channels</button>                       
                         </div>
-                        <div className="userdata">{UserData}
-                        </div>
+                        {/* <div className="userdata"> <UserData activeusers={props.activeusers}/>
+                        </div> */}
+                        <UserData activeUsers={props.activeUsers}/>
                         <div classname="channellist">
                             {Channellist}
                         </div>
@@ -158,7 +144,7 @@ function MainPage(props){
                         {MessageData}
                         </div>
                         
-                        <div><button className="btn btn-primary" onClick={()=> {writeMessage(sendMessageText); setSendMessageText(''); updateActiveUsers();retrieveMessageFeed() }}  >Send Message</button><input style={{width:"100%"}}value={sendMessageText} onChange={(e) => setSendMessageText(e.target.value)} required></input></div>
+                        <div><button className="btn btn-primary" onClick={()=> {writeMessage(sendMessageText); setSendMessageText(''); updateActiveUsers();updateMessageFeed() }}  >Send Message</button><input style={{width:"100%"}}value={sendMessageText} onChange={(e) => setSendMessageText(e.target.value)} required></input></div>
                     </div>
                     
                     

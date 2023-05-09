@@ -3,7 +3,7 @@ import './App.css';
 import LoginPage from './Components/LoginPage';
 import MainPage from './Components/MainPage';
 import MessageFeed from './Components/MessageFeed';
-import UserBar from './Components/UserBar';
+import UserBar from './Components/UserData';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap/dist/js/bootstrap.min.js';
 import { useState } from 'react';
@@ -12,7 +12,7 @@ import { useState } from 'react';
 
 
 
-debugger
+
 
 function App() {
 
@@ -68,7 +68,7 @@ function App() {
   
   return (
     <div>
-      {/* <MainPage UsersOnline={dummyUsersOnline} messageFeed={messageFeed} setMessageFeed={setMessageFeed} setLoginStatus={setLoginStatus} activeUsers={activeUsers} setActiveUsers={setActiveUsers} serverURL={serverURL}/> */}
+      
       <LoginPage setLoginStatus={setLoginStatus} serverURL={serverURL} />
        
        
