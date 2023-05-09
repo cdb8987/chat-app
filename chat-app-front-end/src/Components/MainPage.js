@@ -5,8 +5,23 @@ function MainPage(props){
 
     let [sendMessageText, setSendMessageText] = useState('')
     const [count, setCount] = useState(0);
-    // const [channelId, setChannelID] = useState(1)
     const [messageFeedSelection, setMessageFeedSelection] = useState('channels')
+    
+    
+//     let channelId;
+//     if(sessionStorage.getItem('channelId')){
+//         channelId = sessionStorage.getItem('channelId');
+//         console.log('channelId from session storage used.  ', channelId)
+//       }
+//     else{ channelId = 1; sessionStorage.setItem('channelId', channelId)
+// console.log('channelId reset to 1')}
+
+    
+    
+      const updateChannelId = (channelId)=>{
+        sessionStorage.setItem('channelId', channelId)
+        
+    }
     
 
     const logOut = ()=>{
@@ -63,7 +78,7 @@ function MainPage(props){
         }
     
     const retrieveMessageFeed = ()=>{
-            fetch(`${props.serverURL}/messages?ChannelId=${props.channelId}`)
+            fetch(`${props.serverURL}/messages?ChannelId=${sessionStorage.getItem('channelId')}`)
             .then(response=> response.json())
             .then((response)=>{
                 let message_feed = []
@@ -107,7 +122,7 @@ function MainPage(props){
     let Channellist = (
         <div>
             {props.channels.map(item=> (
-            <div><button type="button" class="btn btn-outline-dark" onClick={()=> {props.setChannelID(item[0]); console.log('setChannelID executed with value:', item[0]); console.log('channelID is:', props.channelId)}}>{item[1]} </button>  
+            <div><button type="button" class="btn btn-outline-dark" onClick={()=> {updateChannelId(item[0]); retrieveMessageFeed(); console.log('setChannelID executed with value:', item[0]); console.log('channelID in sessionstorage is:', sessionStorage.getItem('channelId')); }}>{item[1]} </button>  
             
             </div>
             ))}
