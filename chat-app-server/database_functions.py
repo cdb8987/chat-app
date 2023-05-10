@@ -68,7 +68,7 @@ def add_message(username, messagetext, Channel_id=None, message_type='channel', 
             cur.execute('INSERT INTO messages (userid, messagetext, createddate, channel_id)'
                         'VALUES (%s, %s, %s, %s)',
                         (user_id, messagetext, createddate, Channel_id))
-        elif message_type == 'direct_message':
+        elif message_type == 'DirectMessage':
             cur.execute(
                 'SELECT user_id from users where username = %s', (recipient_username, ))
             recipient_user_id = cur.fetchone()[0]

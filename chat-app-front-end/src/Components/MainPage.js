@@ -48,7 +48,8 @@ function MainPage(props){
         })
     }
     const updateMessageFeed = ()=>{
-        fetch(`${props.serverURL}/messages?ChannelId=${sessionStorage.getItem('channelId')}`)
+        const messageType = sessionStorage.getItem('MessageTypeSelection')
+        fetch(`${props.serverURL}/messages?ChannelId=${sessionStorage.getItem('channelId')}&MessageType=${messageType}`)
         .then(response=> response.json())
         .then((response)=>{
             let message_feed = []
@@ -143,7 +144,7 @@ function MainPage(props){
                     <div className="messagefeed" style={{flexBasis: '66.66%'}}>
                     <div  className="container p-3 my-3 border" style={{textAlign: 'center'}}>
                             <button className="btn btn-light" onClick={()=> sessionStorage.setItem('MessageTypeSelection', 'channel')}>Feed</button>
-                            <button className="btn btn-light" onClick={()=> sessionStorage.setItem('MessageTypeSelection', 'direct_message')}>Direct Messages</button>
+                            <button className="btn btn-light" onClick={()=> sessionStorage.setItem('MessageTypeSelection', 'DirectMessage')}>Direct Messages</button>
                         
                             <button className='btn btn-secondary' style={{float: 'right'}}onClick={()=> {logOut()}}>Log Out</button>
                     </div>

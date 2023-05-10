@@ -144,8 +144,10 @@ def index():
 
 @app.get("/messages")
 @token_required
-def retrieve_messages(message_type='DirectMessage'):
+def retrieve_messages():
     # print(request.headers)
+    message_type = request.args.get('MessageType')
+    print("message_type is:", message_type)
 
     try:
         if message_type == 'channel':
@@ -157,14 +159,14 @@ def retrieve_messages(message_type='DirectMessage'):
             data = jwt.decode(token, app.config['SECRET_KEY'], [
                 "HS256"], options={"verify_exp": False})
             recipient_username = data['user']
-            print('\n\nrecipient_username is:', recipient_username)
+            # print('\n\nrecipient_username is:', recipient_username)
 
-            sql = "SELECT messages.referenceid, messages.userid, messages.messagetext, messages.createddate, users.username FROM messages JOIN users ON messages.userid = users.user_id WHERE recipient_user_id = (SELECT user_id WHERE username = %s)"
+            sql = "SELECT messages.referenceid, messages.userid, messages.messagetext, messages.createddate, messages.recipient_user_id, users.username FROM messages JOIN users ON messages.userid = users.user_id WHERE recipient_user_id = (SELECT user_id WHERE username = %s)"
             values = (recipient_username, )
 
         message_data = database_functions.retrieve_messages(sql, values)
         # print(message_data)
-        print('Here are the retrieved messages:', message_data)
+        # print('Here are the retrieved messages:', message_data)
         return jsonify(message_data)
         # returns data type: <class 'flask.wrappers.Response'>
     except:
@@ -198,15 +200,21 @@ def write_message(message_type='channel'):
             database_functions.add_message(
                 username, messagetext, message_type=message_type, Channel_id=Channel_id)
 
-        elif message_type == 'direct_message':
+        elif message_type == 'DirectMessage':
+            print('\n\n\n\n\n DirectMessage boolean triggered \n\n\n\n\n\n\n')
             data = jwt.decode(token, app.config['SECRET_KEY'], ["HS256"])
             messagetext = request.headers.get('MessageText')
             recipient_username = str(request.headers.get('RecipientUsername'))
             if messagetext == '':
                 return jsonify({'message': 'Messagetext cannot be blank.'})
             username = data['user']
+
+            print(
+                f'Data being passed into add message function: messagetext  {messagetext}, recipient_username {recipient_username}, username {username}')
+
             database_functions.add_message(
                 username, messagetext, message_type=message_type, recipient_username=recipient_username)
+
         else:
             raise 'message type not specified'
 
@@ -261,7 +269,7 @@ def retrieve_channels():
         sql = 'SELECT channel_id, channel_name FROM channels'
         values = None
         channel_data = database_functions.retrieve_messages(sql, values)
-        print('Here are the retrieved channels:', channel_data)
+        # print('Here are the retrieved channels:', channel_data)
         return jsonify(channel_data)
 
     except:
