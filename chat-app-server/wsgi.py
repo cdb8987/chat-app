@@ -144,14 +144,27 @@ def index():
 
 @app.get("/messages")
 @token_required
-def retrieve_messages():
+def retrieve_messages(message_type='DirectMessage'):
+    # print(request.headers)
+
     try:
-        channel_id = request.args.get('ChannelId')
-        print(channel_id)
-        sql = 'SELECT messages.referenceid, messages.userid, messages.messagetext, messages.createddate, users.username FROM messages JOIN users ON messages.userid = users.user_id WHERE channel_id = %s'
-        values = (channel_id,)
+        if message_type == 'channel':
+            channel_id = request.args.get('ChannelId')
+            sql = 'SELECT messages.referenceid, messages.userid, messages.messagetext, messages.createddate, users.username FROM messages JOIN users ON messages.userid = users.user_id WHERE channel_id = %s'
+            values = (channel_id,)
+        elif message_type == 'DirectMessage':
+            token = request.cookies.get('access_token')
+            data = jwt.decode(token, app.config['SECRET_KEY'], [
+                "HS256"], options={"verify_exp": False})
+            recipient_username = data['user']
+            print('\n\nrecipient_username is:', recipient_username)
+
+            sql = "SELECT messages.referenceid, messages.userid, messages.messagetext, messages.createddate, users.username FROM messages JOIN users ON messages.userid = users.user_id WHERE recipient_user_id = (SELECT user_id WHERE username = %s)"
+            values = (recipient_username, )
+
         message_data = database_functions.retrieve_messages(sql, values)
         # print(message_data)
+        print('Here are the retrieved messages:', message_data)
         return jsonify(message_data)
         # returns data type: <class 'flask.wrappers.Response'>
     except:
@@ -248,6 +261,7 @@ def retrieve_channels():
         sql = 'SELECT channel_id, channel_name FROM channels'
         values = None
         channel_data = database_functions.retrieve_messages(sql, values)
+        print('Here are the retrieved channels:', channel_data)
         return jsonify(channel_data)
 
     except:

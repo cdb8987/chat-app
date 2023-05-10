@@ -149,6 +149,8 @@ def retrieve_messages(sql, values):
 
         messages = cur.fetchall()
         disconnect_from_database(cur, conn)
+        print(sql)
+
         return messages
         # returns type 'list'
     except:
