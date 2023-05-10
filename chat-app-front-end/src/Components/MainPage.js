@@ -8,6 +8,17 @@ function MainPage(props){
 
     let [sendMessageText, setSendMessageText] = useState('')
     const [count, setCount] = useState(0); 
+    if(!sessionStorage.getItem('MessageTypeSelection')){
+        sessionStorage.setItem('MessageTypeSelection', 'direct_message')
+    }
+    let MessageTypeSelection = sessionStorage.getItem('MessageTypeSelection')
+
+    if(!sessionStorage.getItem('RecipientUsername')){
+        sessionStorage.setItem('RecipientUsername', 'carlosjackal')
+    }
+    let RecipientUsername = sessionStorage.getItem('RecipientUsername')
+
+
     const updateChannellist = ()=>{
         fetch(`${props.serverURL}/channels`)
         .then(response=> response.json())
@@ -60,10 +71,11 @@ function MainPage(props){
 
     const writeMessage = (MessageText)=>{
         const myHeaders = new Headers();
-        
+        console.log("MessageType", MessageTypeSelection)
         myHeaders.append("MessageText", MessageText);
         myHeaders.append("ChannelId", props.channelId)
-        
+        myHeaders.append("MessageType", MessageTypeSelection)
+        myHeaders.append("RecipientUsername", RecipientUsername)
         
     
         const raw = "";

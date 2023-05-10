@@ -57,16 +57,26 @@ def add_channel(username, channel_name):
         print('add_channel function FAILED')
 
 
-def add_message(username, messagetext, Channel_id=1):
+def add_message(username, messagetext, Channel_id=None, message_type='channel', recipient_username='none'):
     try:
         connection = access_database()
         cur, conn, createddate = connection[0], connection[1], connection[2]
         cur.execute(
             'SELECT user_id from users where username = %s', (username, ))
         user_id = cur.fetchone()[0]
-        cur.execute('INSERT INTO messages (userid, messagetext, createddate, channel_id)'
-                    'VALUES (%s, %s, %s, %s)',
-                    (user_id, messagetext, createddate, Channel_id))
+        if message_type == 'channel':
+            cur.execute('INSERT INTO messages (userid, messagetext, createddate, channel_id)'
+                        'VALUES (%s, %s, %s, %s)',
+                        (user_id, messagetext, createddate, Channel_id))
+        elif message_type == 'direct_message':
+            cur.execute(
+                'SELECT user_id from users where username = %s', (recipient_username, ))
+            recipient_user_id = cur.fetchone()[0]
+            cur.execute('INSERT INTO messages (userid, messagetext, createddate, recipient_user_id)'
+                        'VALUES (%s, %s, %s, %s)',
+                        (user_id, messagetext, createddate, recipient_user_id))
+        else:
+            raise "message type not specified"
 
         disconnect_from_database(cur, conn)
         return jsonify({'response': f'message ({messagetext}) added to database'})

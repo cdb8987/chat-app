@@ -160,28 +160,42 @@ def retrieve_messages():
 
 @app.post("/messages")
 @token_required
-def write_message(is_unittest=False):
+def write_message(message_type='channel'):
+    if request.headers.get('MessageType'):
+        message_type = request.headers.get('MessageType')
+        print('\n\n\n\n\n\n\n\n\n\n\n\n\n', message_type, '\n\n\n\n\n\n\n')
+
     try:
         token = request.cookies.get('access_token')
 
-        if is_unittest:
+        if message_type == 'unittest':
             data = jwt.decode(token, app.config['SECRET_KEY'], [
                 "HS256"], options={"verify_exp": False})
             messagetext = 'TESTMESSAGE'
+            username = data['user']
+            database_functions.add_message(username, messagetext)
 
-        else:
+        elif message_type == 'channel':
             data = jwt.decode(token, app.config['SECRET_KEY'], ["HS256"])
             messagetext = request.headers.get('MessageText')
             Channel_id = str(request.headers.get('ChannelId'))
             if messagetext == '':
                 return jsonify({'message': 'Messagetext cannot be blank.'})
-            print(request.headers)
-            print('messagetext is: ', messagetext,
-                  'Channel_id is:', Channel_id, 'Channel_id type is: ', type(Channel_id))
+            username = data['user']
+            database_functions.add_message(
+                username, messagetext, message_type=message_type, Channel_id=Channel_id)
 
-        username = data['user']
-
-        database_functions.add_message(username, messagetext, Channel_id)
+        elif message_type == 'direct_message':
+            data = jwt.decode(token, app.config['SECRET_KEY'], ["HS256"])
+            messagetext = request.headers.get('MessageText')
+            recipient_username = str(request.headers.get('RecipientUsername'))
+            if messagetext == '':
+                return jsonify({'message': 'Messagetext cannot be blank.'})
+            username = data['user']
+            database_functions.add_message(
+                username, messagetext, message_type=message_type, recipient_username=recipient_username)
+        else:
+            raise 'message type not specified'
 
         status_message = f'writemessage function successfully executed. {username} wrote {messagetext} to the database.'
         return jsonify({'message': status_message})

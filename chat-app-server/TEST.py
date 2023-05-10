@@ -1,10 +1,10 @@
 import unittest
-import server
+import wsgi
 from flask import Flask, request, make_response
 from werkzeug.wrappers import Response
 
 
-login, write_message, create_app = server.login, server.write_message, server.create_app
+login, write_message, create_app = wsgi.login, wsgi.write_message, wsgi.create_app
 
 
 class TestLogin(unittest.TestCase):
@@ -37,11 +37,11 @@ class TestWriteMessage(unittest.TestCase):
         with self.app.test_request_context('/', headers={'MessageText': 'TESTMESSAGE'}):
 
             stub_response = '(<Response 35 bytes [200 OK]>, 403 )'
-            print('FUNCTION RESULT IS', write_message(is_unittest=True))
+            print('FUNCTION RESULT IS', write_message(message_type='unittest'))
             print('STUB_RESPONSE IS', stub_response)
             print('Write_Message outputs: ',
-                  write_message(is_unittest=True))
-            self.assertEqual(write_message(is_unittest=True)[1], 403)
+                  write_message(message_type='unittest'))
+            self.assertEqual(write_message(message_type='unittest')[1], 403)
         print('test_Write_Message COMPLETE')
 
     def test_failed_Write_message(self):
