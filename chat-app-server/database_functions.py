@@ -69,12 +69,29 @@ def add_message(username, messagetext, Channel_id=None, message_type='channel', 
                         'VALUES (%s, %s, %s, %s)',
                         (user_id, messagetext, createddate, Channel_id))
         elif message_type == 'DirectMessage':
-            cur.execute(
-                'SELECT user_id from users where username = %s', (recipient_username, ))
-            recipient_user_id = cur.fetchone()[0]
-            cur.execute('INSERT INTO messages (userid, messagetext, createddate, recipient_user_id)'
-                        'VALUES (%s, %s, %s, %s)',
-                        (user_id, messagetext, createddate, recipient_user_id))
+            # print(
+            #     '\n\n\n\n\n\n\nDirectMessage in database_functions selected\n\n\n\n\n\n\n')
+            # cur.execute(
+            #     'SELECT user_id from users where username = %s', (recipient_username, ))
+            # recipient_user_id = cur.fetchone()[0]
+
+            # test = cur.execute('SELECT * from users')
+            # print('Heres whats left after you use the cursor', test)
+
+            sql = 'INSERT INTO messages (userid, messagetext, createddate, recipient_user_id) VALUES (%s, %s, %s, (SELECT user_id from users where username = %s))'
+
+            # 'INSERT INTO messages (userid, messagetext, createddate, recipient_user_id)'
+            #             'VALUES (%s, %s, %s, %s)'
+
+            # print('\n\n\n\nuser_id ', user_id,
+            #       'recipient_user_id ', recipient_user_id)
+
+            try:
+                cur.execute(sql, (user_id, messagetext,
+                                  createddate, recipient_username))
+            except Exception as error:
+                print("Oops! An exception has occured:", error)
+                print("Exception TYPE:", type(error))
         else:
             raise "message type not specified"
 
@@ -145,12 +162,17 @@ def retrieve_messages(sql, values):
     try:
         connection = access_database()
         cur, conn = connection[0], connection[1]
-        cur.execute(sql, values)
 
+        try:
+            cur.execute(sql, values)
+        except Exception as error:
+            print("Oops! An exception has occured:", error)
+            print("Exception TYPE:", type(error))
         messages = cur.fetchall()
         disconnect_from_database(cur, conn)
-        print(sql)
+        # print(sql)
 
+        print('messages', messages)
         return messages
         # returns type 'list'
     except:

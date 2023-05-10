@@ -147,7 +147,7 @@ def index():
 def retrieve_messages():
     # print(request.headers)
     message_type = request.args.get('MessageType')
-    print("message_type is:", message_type)
+    # print("message_type is:", message_type)
 
     try:
         if message_type == 'channel':
@@ -161,9 +161,10 @@ def retrieve_messages():
             recipient_username = data['user']
             # print('\n\nrecipient_username is:', recipient_username)
 
-            sql = "SELECT messages.referenceid, messages.userid, messages.messagetext, messages.createddate, messages.recipient_user_id, users.username FROM messages JOIN users ON messages.userid = users.user_id WHERE recipient_user_id = (SELECT user_id WHERE username = %s)"
+            sql = "SELECT messages.referenceid, messages.userid, messages.messagetext, messages.createddate, users.username FROM messages JOIN users ON messages.userid = users.user_id WHERE recipient_user_id = (SELECT user_id FROM users WHERE username = %s)"
             values = (recipient_username, )
 
+        print(sql, values)
         message_data = database_functions.retrieve_messages(sql, values)
         # print(message_data)
         # print('Here are the retrieved messages:', message_data)
@@ -178,7 +179,7 @@ def retrieve_messages():
 def write_message(message_type='channel'):
     if request.headers.get('MessageType'):
         message_type = request.headers.get('MessageType')
-        print('\n\n\n\n\n\n\n\n\n\n\n\n\n', message_type, '\n\n\n\n\n\n\n')
+        # print('\n\n\n\n\n\n\n\n\n\n\n\n\n', message_type, '\n\n\n\n\n\n\n')
 
     try:
         token = request.cookies.get('access_token')
@@ -210,7 +211,7 @@ def write_message(message_type='channel'):
             username = data['user']
 
             print(
-                f'Data being passed into add message function: messagetext  {messagetext}, recipient_username {recipient_username}, username {username}')
+                f'Data being passed into add message function: messagetext  {messagetext}, recipient_username {recipient_username}, username {username}, messagetype {message_type}')
 
             database_functions.add_message(
                 username, messagetext, message_type=message_type, recipient_username=recipient_username)
