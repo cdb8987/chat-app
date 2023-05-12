@@ -92,5 +92,9 @@
   }
 }
 .MessageFeedTitle{
-  border-bottom: 3px solid black;
+  text-align: center;
+  font-size:x-large;
+  font-weight: bold;
+  margin: 20px;
+  text-transform: uppercase;
 }

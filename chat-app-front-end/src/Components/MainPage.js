@@ -141,18 +141,18 @@ function MainPage(props){
                     <div className="userbar" style={{flexBasis: '33.33%', borderRightColor: 'lightgrey', borderRightStyle: 'solid'}}>
                         <div className="container p-3 my-3 border" style={{textAlign: 'center'}}>
                             
-                            <button className="btn btn-light" onClick={()=> {sessionStorage.setItem('MessageTypeSelection', 'channel'); sessionStorage.setItem('LeftContainerComponentSelect', 'Channels')}}>Feed</button>
-                            <button className="btn btn-light" onClick={()=> {sessionStorage.setItem('MessageTypeSelection', 'DirectMessage'); sessionStorage.setItem('LeftContainerComponentSelect', 'Conversations')}}>Direct Messages</button>
+                            <button className="btn btn-outline-dark" onClick={()=> {sessionStorage.setItem('MessageTypeSelection', 'channel'); sessionStorage.setItem('LeftContainerComponentSelect', 'Channels')}}>Feed</button>
+                            <button className="btn btn-outline-dark" onClick={()=> {sessionStorage.setItem('MessageTypeSelection', 'DirectMessage'); sessionStorage.setItem('LeftContainerComponentSelect', 'Conversations')}}>Direct Messages</button>
                         </div>
                         {LeftContainerComponent}
                         <UserData activeUsers={props.activeUsers} logOut={logOut}/>
                     </div>
                     <div className="messagefeed" style={{flexBasis: '66.66%'}}>
-                    <div  className="container p-3 my-3 border" style={{textAlign: 'center'}}>
+                    {/* <div  className="container p-3 my-3 border" style={{textAlign: 'center'}}>
                             
-                    </div>
+                    </div> */}
 
-                    <div style={{height: '70%', overflow:'auto'}}>
+                    <div style={{height: '80%', overflow:'auto'}}>
                         <MessageFeed messageFeed={props.messageFeed} />
                     </div>
                         
