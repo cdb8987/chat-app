@@ -1,7 +1,9 @@
 function UserData(props){
     let userData = props.activeUsers ? (
-        <div>
+        <div className="UserData"><p className="UserDataTitle">ONLINE NOW</p>
             {props.activeUsers.map(item=>(<p>🟢{item}</p>))}
+            <button className='btn btn-secondary' onClick={()=> {props.logOut()}}>Log Out</button>
+
         </div>
     ) : null;
 

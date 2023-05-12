@@ -60,3 +60,37 @@
   margin: auto;
 }
 
+.UserData{
+  height: 40%;
+  margin-top: 10px;
+  text-align: center;
+  font-weight: bold;
+  .UserDataTitle{
+    border-bottom: 3px solid black;
+
+  }
+}
+
+.Channels{
+  height: 40%;
+  margin-top: 10px;
+  text-align: center;
+  font-weight: bold;
+  .ChannelsTitle{
+    border-bottom: 3px solid black;
+  }
+}
+
+.Conversations{
+  height: 40%;
+  margin-top: 10px;
+  text-align: center;
+  font-weight: bold;
+  .ConversationsTitle{
+    border-bottom: 3px solid black;
+
+  }
+}
+.MessageFeedTitle{
+  border-bottom: 3px solid black;
+}

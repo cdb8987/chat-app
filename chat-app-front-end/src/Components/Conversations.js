@@ -9,11 +9,14 @@ function Conversations(){
         console.log(value)
     }
     return (
-        <form onSubmit={()=>{console.log('Username Entered')}}>
-            <label>Recipient:</label>
-            <input onChange={handleChange}></input>
-            <input type="submit" onClick={()=>{sessionStorage.setItem('RecipientUsername', value )}}></input>
-        </form>
+        <div className="Conversations">
+            <p className="ConversationsTitle">Channels</p>
+            <form ConversationsonSubmit={()=>{console.log('Username Entered')}}>
+                <label>Recipient:</label>
+                <input onChange={handleChange}></input>
+                <input type="submit" onClick={()=>{sessionStorage.setItem('RecipientUsername', value )}}></input>
+            </form>
+        </div>
         
     )
 }

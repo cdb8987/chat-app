@@ -23,6 +23,14 @@ function MainPage(props){
         sessionStorage.setItem('LeftContainerComponentSelect', 'OnlineNow')
     } 
     let LeftContainerComponentSelect = sessionStorage.getItem('LeftContainerComponentSelect');
+    if(!sessionStorage.getItem('ChannelName')){
+        sessionStorage.setItem('ChannelName', 'General')
+    } 
+    
+
+
+
+    
     
     const updateChannellist = ()=>{
         fetch(`${props.serverURL}/channels`)
@@ -120,11 +128,8 @@ function MainPage(props){
         case 'Channels':
             LeftContainerComponent = (<ChannelList channels={props.channels} updateChannelId={updateChannelId} updateMessageFeed={updateMessageFeed}/>)
             break;
-        case 'OnlineNow':
-            LeftContainerComponent = (<UserData activeUsers={props.activeUsers}/>)
-            break;
         default:
-            LeftContainerComponent = (<UserData activeUsers={props.activeUsers}/>)
+            LeftContainerComponent = (<Conversations/>)
             break;
 
     }
@@ -135,18 +140,16 @@ function MainPage(props){
                 <div className="pagediv" style={{display: 'flex'}}>
                     <div className="userbar" style={{flexBasis: '33.33%', borderRightColor: 'lightgrey', borderRightStyle: 'solid'}}>
                         <div className="container p-3 my-3 border" style={{textAlign: 'center'}}>
-                            <button className="btn btn-outline-primary" onClick={()=>{sessionStorage.setItem('LeftContainerComponentSelect', 'OnlineNow')}}>Online Now</button>
-                            <button className="btn btn-outline-primary" onClick={()=>{sessionStorage.setItem('LeftContainerComponentSelect', 'Conversations')}}>Conversations</button>
-                            <button className="btn btn-outline-primary" onClick={()=>{sessionStorage.setItem('LeftContainerComponentSelect', 'Channels')}}>Channels</button>                       
+                            
+                            <button className="btn btn-light" onClick={()=> {sessionStorage.setItem('MessageTypeSelection', 'channel'); sessionStorage.setItem('LeftContainerComponentSelect', 'Channels')}}>Feed</button>
+                            <button className="btn btn-light" onClick={()=> {sessionStorage.setItem('MessageTypeSelection', 'DirectMessage'); sessionStorage.setItem('LeftContainerComponentSelect', 'Conversations')}}>Direct Messages</button>
                         </div>
                         {LeftContainerComponent}
+                        <UserData activeUsers={props.activeUsers} logOut={logOut}/>
                     </div>
                     <div className="messagefeed" style={{flexBasis: '66.66%'}}>
                     <div  className="container p-3 my-3 border" style={{textAlign: 'center'}}>
-                            <button className="btn btn-light" onClick={()=> sessionStorage.setItem('MessageTypeSelection', 'channel')}>Feed</button>
-                            <button className="btn btn-light" onClick={()=> sessionStorage.setItem('MessageTypeSelection', 'DirectMessage')}>Direct Messages</button>
-                        
-                            <button className='btn btn-secondary' style={{float: 'right'}}onClick={()=> {logOut()}}>Log Out</button>
+                            
                     </div>
 
                     <div style={{height: '70%', overflow:'auto'}}>
