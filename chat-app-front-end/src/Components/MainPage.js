@@ -3,6 +3,7 @@ import UserData from './UserData';
 import MessageFeed from './MessageFeed';
 import ChannelList from './ChannelList';
 import Conversations from './Conversations';
+import MessageFeedTitle from './MessageFeedTitle'
 
 function MainPage(props){
     
@@ -138,27 +139,29 @@ function MainPage(props){
     return (
         <div className="page">
                 <div className="pagediv" style={{display: 'flex'}}>
-                    <div className="userbar" style={{flexBasis: '33.33%', borderRightColor: 'lightgrey', borderRightStyle: 'solid'}}>
-                        <div className="container p-3 my-3 border" style={{textAlign: 'center'}}>
+                    <div className="userbar" style={{flexBasis: '33.33%', borderRightColor: 'black', borderRightStyle: 'solid'}}>
+                        <div style={{textAlign: 'center', height: '10%', marginTop: '10px'}}>
                             
                             <button className="btn btn-outline-dark" onClick={()=> {sessionStorage.setItem('MessageTypeSelection', 'channel'); sessionStorage.setItem('LeftContainerComponentSelect', 'Channels')}}>Feed</button>
                             <button className="btn btn-outline-dark" onClick={()=> {sessionStorage.setItem('MessageTypeSelection', 'DirectMessage'); sessionStorage.setItem('LeftContainerComponentSelect', 'Conversations')}}>Direct Messages</button>
                         </div>
                         {LeftContainerComponent}
                         <UserData activeUsers={props.activeUsers} logOut={logOut}/>
-                    </div>
-                    <div className="messagefeed" style={{flexBasis: '66.66%'}}>
-                    {/* <div  className="container p-3 my-3 border" style={{textAlign: 'center'}}>
+                        </div>
+                        <div className="messagefeed" style={{flexBasis: '66.66%'}}>
+                            <MessageFeedTitle/>
+                            <div style={{height: '70%', overflow:'auto'}}>
+                                <MessageFeed messageFeed={props.messageFeed} />
+                            </div>
                             
-                    </div> */}
-
-                    <div style={{height: '80%', overflow:'auto'}}>
-                        <MessageFeed messageFeed={props.messageFeed} />
-                    </div>
-                        
-                    <div><form novalidate><button className="btn btn-primary" onClick={handleSend}  >Send Message</button><input onSubmit={handleSend} style={{width:"100%"}}value={sendMessageText} onChange={(e) => setSendMessageText(e.target.value)} required></input></form>
-                    </div>
-                    </div>
+                            <div><form novalidate><input onSubmit={handleSend} style={{width:"100%"}}value={sendMessageText} onChange={(e) => setSendMessageText(e.target.value)} required></input>
+                            </form>
+                                <div style={{display: 'flex', flexWrap: 'wrap', alignContent: 'space-between'}}>
+                                <button className="btn btn-primary"  onClick={handleSend}  >Send</button>
+                                <button className='btn btn-secondary' style={{marginLeft: '350px'}}onClick={()=> {logOut()}}>Log Out</button>
+                                </div>
+                            </div>
+                        </div>
                     
                     
                 </div>

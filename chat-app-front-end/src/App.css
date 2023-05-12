@@ -61,7 +61,7 @@
 }
 
 .UserData{
-  height: 40%;
+  
   margin-top: 10px;
   text-align: center;
   font-weight: bold;
@@ -69,11 +69,16 @@
     border-bottom: 3px solid black;
 
   }
+  .UserDataNames{
+    height: 30%;
+    overflow:auto;
+  }
+ 
 }
 
 .Channels{
-  height: 40%;
-  margin-top: 10px;
+  height: 50%;
+  margin-top: 5px;
   text-align: center;
   font-weight: bold;
   .ChannelsTitle{
@@ -82,8 +87,8 @@
 }
 
 .Conversations{
-  height: 40%;
-  margin-top: 10px;
+  height: 50%;
+  margin-top: 5px;
   text-align: center;
   font-weight: bold;
   .ConversationsTitle{
@@ -100,7 +105,8 @@
 }
 
 .receivedMessage{
-  margin-top: 10px;
+  margin-top: 5px;
+  margin-bottom: 5px;
   margin-left: 100px;
   .receivedMessageText{
     text-align:left;
@@ -116,7 +122,8 @@
 
 
 .sentMessage{
-  margin-top: 10px;
+  margin-top: 5px;
+  margin-bottom: 5px;
   margin-left: 25px;
   .sentMessageText{
     text-align:left;

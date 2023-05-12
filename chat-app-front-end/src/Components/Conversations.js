@@ -10,7 +10,7 @@ function Conversations(){
     }
     return (
         <div className="Conversations">
-            <p className="ConversationsTitle">Channels</p>
+            <p className="ConversationsTitle">Conversations</p>
             <form ConversationsonSubmit={()=>{console.log('Username Entered')}}>
                 <label>Recipient:</label>
                 <input onChange={handleChange}></input>
