@@ -46,6 +46,19 @@ function MainPage(props){
     const updateChannelId = (channelId)=>{
         sessionStorage.setItem('channelId', channelId)  
     }
+    const retrieveUserList = ()=>{
+        if(sessionStorage.getItem('userlist')){
+            return sessionStorage.getItem('userlist')
+        }
+        else{
+        fetch(`${props.serverURL}/users`)
+        .then(response=> response.json())
+        .then((response)=> {
+            sessionStorage.setItem('userlist', response)
+            
+        })
+        }
+    }
     const updateActiveUsers = ()=>{
         fetch(`${props.serverURL}/onlineusers`)
         .then(response=> response.json())
@@ -124,13 +137,13 @@ function MainPage(props){
     let LeftContainerComponent;
     switch (LeftContainerComponentSelect){
         case 'Conversations':
-            LeftContainerComponent = (<Conversations/>)
+            LeftContainerComponent = (<Conversations retrieveUserList={retrieveUserList}/>)
             break;
         case 'Channels':
             LeftContainerComponent = (<ChannelList channels={props.channels} updateChannelId={updateChannelId} updateMessageFeed={updateMessageFeed}/>)
             break;
         default:
-            LeftContainerComponent = (<Conversations/>)
+            LeftContainerComponent = (<Conversations retrieveUserList={retrieveUserList}/>)
             break;
 
     }
