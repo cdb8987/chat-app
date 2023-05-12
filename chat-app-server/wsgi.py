@@ -102,6 +102,7 @@ def login(is_unittest=False):
             response = jsonify({'login': True})
             response.set_cookie('access_token', access_token,
                                 httponly=True)  # Set HttpOnly to True
+            response.set_cookie('username', submitted_username)
 
             return response, 200
         else:

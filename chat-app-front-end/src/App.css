@@ -98,3 +98,35 @@
   margin: 20px;
   text-transform: uppercase;
 }
+
+.receivedMessage{
+  margin-top: 10px;
+  margin-left: 100px;
+  .receivedMessageText{
+    text-align:left;
+    background-color: darkgray;
+    color: black;
+    max-width: 50%;
+    border:darkgray; 
+    border-style: solid; 
+    border-radius: 5px
+  }
+}
+
+
+
+.sentMessage{
+  margin-top: 10px;
+  margin-left: 25px;
+  .sentMessageText{
+    text-align:left;
+    justify-content: right;
+    background-color:#0d6efd;
+    color: white;
+    max-width: 50%;
+    border:#0d6efd; 
+    border-style: solid; 
+    border-radius: 5px;
+    
+  }
+}
