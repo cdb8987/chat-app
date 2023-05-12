@@ -12,7 +12,8 @@ function Conversations(){
         <div className="Conversations">
             <p className="ConversationsTitle">Conversations</p>
             <form ConversationsonSubmit={()=>{console.log('Username Entered')}}>
-                <label>Recipient:</label>
+                <label>Select User:</label>
+                
                 <input onChange={handleChange}></input>
                 <input type="submit" onClick={()=>{sessionStorage.setItem('RecipientUsername', value )}}></input>
             </form>

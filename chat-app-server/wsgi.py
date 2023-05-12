@@ -227,6 +227,19 @@ def write_message(message_type='channel'):
 
 
 @app.get("/users")
+# @token_required
+def get_user_list():
+    try:
+        sql = "SELECT username FROM users"
+        values = ('', )
+
+        return database_functions.retrieve_users(sql, values)
+
+    except:
+        print('get_user_list FAILED')
+
+
+@app.get("/onlineusers")
 @token_required
 def get_loggedin_user_list():
 

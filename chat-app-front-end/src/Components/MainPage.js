@@ -47,7 +47,7 @@ function MainPage(props){
         sessionStorage.setItem('channelId', channelId)  
     }
     const updateActiveUsers = ()=>{
-        fetch(`${props.serverURL}/users`)
+        fetch(`${props.serverURL}/onlineusers`)
         .then(response=> response.json())
         .then((response)=> {
             if(String(props.activeUsers) != String(response)){

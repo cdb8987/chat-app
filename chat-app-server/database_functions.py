@@ -158,6 +158,30 @@ def verify_username_and_password(username, password, is_unittest):
         print('verify_username_and_password function FAILED')
 
 
+def retrieve_users(sql, values):
+    try:
+        connection = access_database()
+        cur, conn = connection[0], connection[1]
+
+        try:
+            cur.execute(sql, values)
+        except Exception as error:
+            print("Oops! An exception has occured:", error)
+            print("Exception TYPE:", type(error))
+        users = cur.fetchall()
+        cleaned_users = []
+        for i in users:
+            cleaned_users.append(i[0])
+        disconnect_from_database(cur, conn)
+        # print(sql)
+
+        print('messages', users)
+        return cleaned_users
+        # returns type 'list'
+    except:
+        print('retrieve_messages function FAILED')
+
+
 def retrieve_messages(sql, values):
     try:
         connection = access_database()
