@@ -48,15 +48,57 @@ function MainPage(props){
     }
     const retrieveUserList = ()=>{
         if(sessionStorage.getItem('userlist')){
-            return sessionStorage.getItem('userlist')
+            const storedUsers = JSON.parse(sessionStorage.getItem('userlist'))
+            console.log(`userlist pulled from sessionstorage is a ${typeof storedUsers}with value`, storedUsers)
+            return (
+                <div className="Conversations">
+                    <p className="ConversationsTitle">Conversations</p>
+                    <select>
+                    {storedUsers.map(item=> (<option>{item}</option>))}
+                    </select>
+        
+                    <form ConversationsonSubmit={()=>{console.log('Username Entered')}}>
+                        <label>Select User:</label>
+                        
+                        <input onChange={()=>console.log('handleChange')}></input>
+                        <input type="submit" onClick={()=>{sessionStorage.setItem('RecipientUsername', 'TESTVALUE' )}}></input>
+                    </form>
+                </div>
+                
+            )
         }
         else{
         fetch(`${props.serverURL}/users`)
         .then(response=> response.json())
         .then((response)=> {
-            sessionStorage.setItem('userlist', response)
+            sessionStorage.setItem('userlist', JSON.stringify(response));
+            console.log(`userlist pulled from fetch request is a ${typeof response}with value`, response)
+            return response
             
         })
+        .then((response)=>{
+            return (
+                <div className="Conversations">
+                    <p className="ConversationsTitle">Conversations</p>
+                    <select>
+                    {response.map(item=> (<option>{item}</option>))}
+                    </select>
+        
+                    <form ConversationsonSubmit={()=>{console.log('Username Entered')}}>
+                        <label>Select User:</label>
+                        
+                        <input onChange={()=>console.log('handleChange')}></input>
+                        <input type="submit" onClick={()=>{sessionStorage.setItem('RecipientUsername', 'TESTVALUE' )}}></input>
+                    </form>
+                </div>
+                
+            )
+
+
+        })
+        
+        
+        
         }
     }
     const updateActiveUsers = ()=>{

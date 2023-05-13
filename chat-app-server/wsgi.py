@@ -233,7 +233,7 @@ def get_user_list():
         sql = "SELECT username FROM users"
         values = ('', )
 
-        return database_functions.retrieve_users(sql, values)
+        return jsonify(database_functions.retrieve_users(sql, values))
 
     except:
         print('get_user_list FAILED')
