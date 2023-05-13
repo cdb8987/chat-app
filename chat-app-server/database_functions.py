@@ -175,7 +175,7 @@ def retrieve_users(sql, values):
         disconnect_from_database(cur, conn)
         # print(sql)
 
-        print('messages', users)
+        # print('messages', users)
         return cleaned_users
         # returns type 'list'
     except:
@@ -196,7 +196,7 @@ def retrieve_messages(sql, values):
         disconnect_from_database(cur, conn)
         # print(sql)
 
-        print('messages', messages)
+        # print('messages', messages)
         return messages
         # returns type 'list'
     except:

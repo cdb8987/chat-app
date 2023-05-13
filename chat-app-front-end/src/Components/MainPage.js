@@ -49,16 +49,18 @@ function MainPage(props){
     const retrieveUserList = ()=>{
         if(sessionStorage.getItem('userlist')){
             const storedUsers = JSON.parse(sessionStorage.getItem('userlist'))
-            console.log(`userlist pulled from sessionstorage is a ${typeof storedUsers}with value`, storedUsers)
+            // console.log(`userlist pulled from sessionstorage is a ${typeof storedUsers}with value`, storedUsers)
             return (
                 <div className="Conversations">
                     <p className="ConversationsTitle">Conversations</p>
-                    <select class="form-select" aria-label="Default select example">
+                    <select onChange={(e)=> sessionStorage.setItem('RecipientUsername', e.target.value)}    class="form-select" aria-label="Default select example">
                         <option selected>Select User</option>
                         {storedUsers.map(item=> (<option>{item}</option>))}
                     </select>
                 </div>
                 
+                
+
             )
         }
         else{
@@ -66,7 +68,7 @@ function MainPage(props){
         .then(response=> response.json())
         .then((response)=> {
             sessionStorage.setItem('userlist', JSON.stringify(response));
-            console.log(`userlist pulled from fetch request is a ${typeof response}with value`, response)
+            // console.log(`userlist pulled from fetch request is a ${typeof response}with value`, response)
             return response
             
         })
@@ -74,16 +76,12 @@ function MainPage(props){
             return (
                 <div className="Conversations">
                     <p className="ConversationsTitle">Conversations</p>
-                    <select>
-                    {response.map(item=> (<option>{item}</option>))}
+                    <select onChange={(e)=> sessionStorage.setItem('RecipientUsername', e.target.value)}    class="form-select" aria-label="Default select example">
+                        <option selected>Select User</option>
+                        {response.map(item=> (<option>{item}</option>))}
                     </select>
         
-                    <form ConversationsonSubmit={()=>{console.log('Username Entered')}}>
-                        <label>Select User:</label>
-                        
-                        <input onChange={()=>console.log('handleChange')}></input>
-                        <input type="submit" onClick={()=>{sessionStorage.setItem('RecipientUsername', 'TESTVALUE' )}}></input>
-                    </form>
+                    
                 </div>
                 
             )
@@ -107,7 +105,7 @@ function MainPage(props){
     }
     const updateMessageFeed = ()=>{
         const messageType = sessionStorage.getItem('MessageTypeSelection')
-        fetch(`${props.serverURL}/messages?ChannelId=${sessionStorage.getItem('channelId')}&MessageType=${messageType}`)
+        fetch(`${props.serverURL}/messages?ChannelId=${sessionStorage.getItem('channelId')}&MessageType=${messageType}&RecipientUsername=${sessionStorage.getItem('RecipientUsername')}`)
         .then(response=> response.json())
         .then((response)=>{
             let message_feed = []

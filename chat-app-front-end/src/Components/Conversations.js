@@ -8,7 +8,7 @@ function Conversations(props){
     //     SetValue(event.target.value);
     //     console.log(value)
     // }
-    console.log('the retrieve users function is', props.retrieveUserList)
+    // console.log('the retrieve users function is', props.retrieveUserList)
     return props.retrieveUserList()
     }
 

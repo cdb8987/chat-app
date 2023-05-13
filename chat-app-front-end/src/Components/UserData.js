@@ -13,7 +13,7 @@ function UserData(props){
         </div>
     ) : null;
 
-        console.log(userData)
+        // console.log(userData)
     return (
         <div> {userData}
                         </div>)
