@@ -15,13 +15,13 @@ function MainPage(props){
     }
     let MessageTypeSelection = sessionStorage.getItem('MessageTypeSelection')
 
-    if(!sessionStorage.getItem('RecipientUsername')){
-        sessionStorage.setItem('RecipientUsername', '')
+    if(!sessionStorage.getItem('FriendUsername')){
+        sessionStorage.setItem('FriendUsername', '')
     }
-    let RecipientUsername = sessionStorage.getItem('RecipientUsername')
+    let FriendUsername = sessionStorage.getItem('FriendUsername')
     
     if(!sessionStorage.getItem('LeftContainerComponentSelect')){
-        sessionStorage.setItem('LeftContainerComponentSelect', 'OnlineNow')
+        sessionStorage.setItem('LeftContainerComponentSelect', 'Channels')
     } 
     let LeftContainerComponentSelect = sessionStorage.getItem('LeftContainerComponentSelect');
     if(!sessionStorage.getItem('ChannelName')){
@@ -53,7 +53,7 @@ function MainPage(props){
             return (
                 <div className="Conversations">
                     <p className="ConversationsTitle">Conversations</p>
-                    <select onChange={(e)=> sessionStorage.setItem('RecipientUsername', e.target.value)}    class="form-select" aria-label="Default select example">
+                    <select onChange={(e)=> sessionStorage.setItem('FriendUsername', e.target.value)}    class="form-select" aria-label="Default select example">
                         <option selected>Select User</option>
                         {storedUsers.map(item=> (<option>{item}</option>))}
                     </select>
@@ -76,7 +76,7 @@ function MainPage(props){
             return (
                 <div className="Conversations">
                     <p className="ConversationsTitle">Conversations</p>
-                    <select onChange={(e)=> sessionStorage.setItem('RecipientUsername', e.target.value)}    class="form-select" aria-label="Default select example">
+                    <select onChange={(e)=> sessionStorage.setItem('FriendUsername', e.target.value)}    class="form-select" aria-label="Default select example">
                         <option selected>Select User</option>
                         {response.map(item=> (<option>{item}</option>))}
                     </select>
@@ -105,7 +105,7 @@ function MainPage(props){
     }
     const updateMessageFeed = ()=>{
         const messageType = sessionStorage.getItem('MessageTypeSelection')
-        fetch(`${props.serverURL}/messages?ChannelId=${sessionStorage.getItem('channelId')}&MessageType=${messageType}&RecipientUsername=${sessionStorage.getItem('RecipientUsername')}`)
+        fetch(`${props.serverURL}/messages?ChannelId=${sessionStorage.getItem('channelId')}&MessageType=${messageType}&FriendUsername=${sessionStorage.getItem('FriendUsername')}`)
         .then(response=> response.json())
         .then((response)=>{
             let message_feed = []
@@ -137,7 +137,7 @@ function MainPage(props){
         myHeaders.append("MessageText", MessageText);
         myHeaders.append("ChannelId", props.channelId)
         myHeaders.append("MessageType", MessageTypeSelection)
-        myHeaders.append("RecipientUsername", RecipientUsername)
+        myHeaders.append("FriendUsername", FriendUsername)
         
     
         const raw = "";
@@ -177,7 +177,7 @@ function MainPage(props){
             LeftContainerComponent = (<ChannelList channels={props.channels} updateChannelId={updateChannelId} updateMessageFeed={updateMessageFeed}/>)
             break;
         default:
-            LeftContainerComponent = (<Conversations retrieveUserList={retrieveUserList}/>)
+            LeftContainerComponent = (<ChannelList channels={props.channels} updateChannelId={updateChannelId} updateMessageFeed={updateMessageFeed}/>)
             break;
 
     }

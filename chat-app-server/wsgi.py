@@ -160,14 +160,15 @@ def retrieve_messages():
             data = jwt.decode(token, app.config['SECRET_KEY'], [
                 "HS256"], options={"verify_exp": False})
             userName = data['user']
-            RecipientUsername = request.args.get('RecipientUsername')
+            FriendUsername = request.args.get('FriendUsername')
             print(request.args)
-            print(f'\n\n\n\nRecipient Username is {RecipientUsername}')
+            print(f'\n\n\n\nFriendUsername is {FriendUsername}')
 
-            # print('\n\nrecipient_username is:', recipient_username)
+            # sql = "SELECT messages.referenceid, messages.userid, messages.messagetext, messages.createddate, users.username FROM messages JOIN users ON messages.userid = users.user_id WHERE recipient_user_id = (SELECT user_id FROM users WHERE username = %s)"
+            # values = (userName, )
 
-            sql = "SELECT messages.referenceid, messages.userid, messages.messagetext, messages.createddate, users.username FROM messages JOIN users ON messages.userid = users.user_id WHERE recipient_user_id = (SELECT user_id FROM users WHERE username = %s)"
-            values = (userName, )
+            sql = "SELECT messages.referenceid, messages.userid, messages.messagetext, messages.createddate, users.username FROM messages JOIN users ON messages.userid = users.user_id WHERE (recipient_user_id = (SELECT user_id FROM users WHERE username = %s) AND username = %s) OR (recipient_user_id = (SELECT user_id FROM users WHERE username = %s) AND username = %s)"
+            values = (userName, FriendUsername, FriendUsername, userName)
 
         # print(sql, values)
         message_data = database_functions.retrieve_messages(sql, values)
