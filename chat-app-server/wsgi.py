@@ -164,11 +164,13 @@ def retrieve_messages():
             print(request.args)
             print(f'\n\n\n\nFriendUsername is {FriendUsername}')
 
-            # sql = "SELECT messages.referenceid, messages.userid, messages.messagetext, messages.createddate, users.username FROM messages JOIN users ON messages.userid = users.user_id WHERE recipient_user_id = (SELECT user_id FROM users WHERE username = %s)"
-            # values = (userName, )
-
             sql = "SELECT messages.referenceid, messages.userid, messages.messagetext, messages.createddate, users.username FROM messages JOIN users ON messages.userid = users.user_id WHERE (recipient_user_id = (SELECT user_id FROM users WHERE username = %s) AND username = %s) OR (recipient_user_id = (SELECT user_id FROM users WHERE username = %s) AND username = %s)"
             values = (userName, FriendUsername, FriendUsername, userName)
+
+            # This query has been tested and filters for all messages to or from a given user.  The easiest way will probably be to simply return all the results as given by psql and then filter them in python (so you can see them.  )
+            '''SELECT messages.referenceid, messages.userid, messages.messagetext, messages.createddate, users.username FROM messages JOIN users ON messages.userid = users.user_id 
+WHERE (recipient_user_id = (SELECT user_id FROM users WHERE username = 'cdb8987')  
+OR (recipient_user_id > 0) AND username = 'cdb8987')'''
 
         # print(sql, values)
         message_data = database_functions.retrieve_messages(sql, values)
