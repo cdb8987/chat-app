@@ -53,16 +53,10 @@ function MainPage(props){
             return (
                 <div className="Conversations">
                     <p className="ConversationsTitle">Conversations</p>
-                    <select>
-                    {storedUsers.map(item=> (<option>{item}</option>))}
+                    <select class="form-select" aria-label="Default select example">
+                        <option selected>Select User</option>
+                        {storedUsers.map(item=> (<option>{item}</option>))}
                     </select>
-        
-                    <form ConversationsonSubmit={()=>{console.log('Username Entered')}}>
-                        <label>Select User:</label>
-                        
-                        <input onChange={()=>console.log('handleChange')}></input>
-                        <input type="submit" onClick={()=>{sessionStorage.setItem('RecipientUsername', 'TESTVALUE' )}}></input>
-                    </form>
                 </div>
                 
             )
