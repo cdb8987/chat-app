@@ -104,6 +104,9 @@ function MainPage(props){
             }
             
         })
+        .catch((error)=> {sessionStorage.setItem('logInStatus', false); 
+        console.log(error);
+        return error})
     }
     const updateMessageFeed = ()=>{
         const messageType = sessionStorage.getItem('MessageTypeSelection')
