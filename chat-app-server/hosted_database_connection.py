@@ -4,7 +4,7 @@ from datetime import date
 
 
 def access_database():
-    createddate = datetime.date.today()
+    createddate = datetime.datetime.today()
 
 # SECOND CONNECTION IS INTENDED FOR HOSTED POSTGRES DATABASE
     # conn = psycopg2.connect(
