@@ -1,4 +1,6 @@
 function UserData(props){
+    
+    
     let userData = props.activeUsers ? (
         <div className="UserData">
             <p className="UserDataTitle">ONLINE NOW</p>

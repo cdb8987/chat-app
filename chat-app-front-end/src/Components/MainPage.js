@@ -101,6 +101,9 @@ function MainPage(props){
         .then((response)=> {
             if(String(props.activeUsers) != String(response)){
                 props.setActiveUsers(response)
+            };
+            if(props.activeUsers.length === 0 ){
+                props.setLoginStatus(false)
             }
             
         })
