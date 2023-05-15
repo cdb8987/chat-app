@@ -219,13 +219,13 @@ def write_message(message_type='channel'):
             # print('\n\n\n\n\n DirectMessage boolean triggered \n\n\n\n\n\n\n')
             data = jwt.decode(token, app.config['SECRET_KEY'], ["HS256"])
             messagetext = request.headers.get('MessageText')
-            recipient_username = str(request.headers.get('RecipientUsername'))
+            recipient_username = str(request.headers.get('FriendUsername'))
             if messagetext == '':
                 return jsonify({'message': 'Messagetext cannot be blank.'})
             username = data['user']
 
-            # print(
-            #     f'Data being passed into add message function: messagetext  {messagetext}, recipient_username {recipient_username}, username {username}, messagetype {message_type}')
+            print(
+                f'\n\n\n\n\nData being passed into add message function: messagetext  {messagetext}, recipient_username {recipient_username}, username {username}, messagetype {message_type}\n\n\n\n\n')
 
             database_functions.add_message(
                 username, messagetext, message_type=message_type, recipient_username=recipient_username)
