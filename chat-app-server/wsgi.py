@@ -179,7 +179,9 @@ WHERE (recipient_user_id = (SELECT user_id FROM users WHERE username = 'cdb8987'
 OR (recipient_user_id > 0) AND username = 'cdb8987')'''
 
         # print(sql, values)
-        message_data = database_functions.retrieve_messages(sql, values)
+        message_data = sorted(database_functions.retrieve_messages(
+            sql, values), key=lambda x: x[0])
+        print('\n\n\n\n', message_data, '\n\n\n\n')
         # print(message_data)
         # print('Here are the retrieved messages:', message_data)
         return jsonify(message_data)

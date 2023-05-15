@@ -8,7 +8,7 @@ import hosted_database_connection
 # access_database = hosted_database_connection.access_database
 # CODE BELOW FOR LOCAL POSTGRES CONNECTION ONLY
 def access_database():
-    createddate = datetime.date.today()
+    createddate = datetime.datetime.today()
 
     conn = psycopg2.connect(
         host="localhost",

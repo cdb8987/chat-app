@@ -9,13 +9,13 @@ function MessageFeed(props){
             {/* <p className="MessageFeedTitle">{TitleContent}</p> */}
             
                 {props.messageFeed.map(item=> (item.name===userName)?(
-                <div className="sentMessage"><strong>{item.name}</strong> {item.time}   
+                <div className="sentMessage"><strong>{item.name}</strong> {String(item.time).replace('GMT', '')}   
                 <div className="sentMessageText">
                     <p >{item.message}</p>
                     </div>
                 </div>
                 ): (
-                    <div className="receivedMessage"><strong>{item.name}</strong> {item.time}   
+                    <div className="receivedMessage"><strong>{item.name}</strong> {String(item.time).replace('GMT', '')}   
                     <div className="receivedMessageText">
                         <p >{item.message}</p>
                         </div>
