@@ -28,6 +28,8 @@ function MainPage(props){
         sessionStorage.setItem('ChannelName', 'General')
     } 
     
+    if(sessionStorage.getItem('logInStatus')===false){props.setLoginStatus(false)}
+    
 
 
 

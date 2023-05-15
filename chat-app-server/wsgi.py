@@ -130,7 +130,13 @@ def logout():
     try:
         token = request.cookies.get('access_token')
         token_blacklist.append(token)
-        return jsonify({'message': 'your token is blacklisted and you are logged out'})
+
+        response = jsonify(
+            {'message': 'your token is blacklisted and you are logged out'})
+        # Set HttpOnly to True
+        response.set_cookie('access_token', '', httponly=True)
+        return response, 200
+
     except:
         print('LOGOUT function FAILED')
 
