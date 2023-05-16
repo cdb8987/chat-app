@@ -29,6 +29,10 @@ function MainPage(props){
     } 
     
     if(sessionStorage.getItem('logInStatus')===false){props.setLoginStatus(false)}
+
+    let [feedIsSelected, setFeedIsSelected] = useState(true);
+    let [DMIsSelected, setDMIsSelected] = useState(false);
+
     
 
 
@@ -190,6 +194,14 @@ function MainPage(props){
 
     }
 
+    const handleClick = () => {
+        console.log(feedIsSelected, DMIsSelected)
+        setFeedIsSelected(!feedIsSelected);
+        setDMIsSelected(!DMIsSelected)
+      }
+
+    let feedButtonClassName = `btn btn-secondary ${feedIsSelected ? 'active' : ''}`;
+    let DMButtonClassName = `btn btn-secondary ${DMIsSelected ? 'active' : ''}`;
 
     return (
         <div className="page">
@@ -197,8 +209,8 @@ function MainPage(props){
                     <div className="userbar" style={{flexBasis: '33.33%', borderRightColor: 'black', borderRightStyle: 'solid'}}>
                         <div style={{textAlign: 'center', height: '10%', marginTop: '10px'}}>
                             
-                            <button className="btn btn-outline-dark" onClick={()=> {sessionStorage.setItem('MessageTypeSelection', 'channel'); sessionStorage.setItem('LeftContainerComponentSelect', 'Channels')}}>Feed</button>
-                            <button className="btn btn-outline-dark" onClick={()=> {sessionStorage.setItem('MessageTypeSelection', 'DirectMessage'); sessionStorage.setItem('LeftContainerComponentSelect', 'Conversations')}}>Direct Messages</button>
+                            <button className={feedButtonClassName} onClick={()=> {handleClick(); sessionStorage.setItem('MessageTypeSelection', 'channel'); sessionStorage.setItem('LeftContainerComponentSelect', 'Channels')}}>Feed</button>
+                            <button className={DMButtonClassName} onClick={()=> {handleClick();sessionStorage.setItem('MessageTypeSelection', 'DirectMessage'); sessionStorage.setItem('LeftContainerComponentSelect', 'Conversations')}}>Direct Messages</button>
                         </div>
                         {LeftContainerComponent}
                         <UserData activeUsers={props.activeUsers} logOut={logOut}/>
