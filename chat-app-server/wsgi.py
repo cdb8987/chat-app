@@ -10,6 +10,11 @@ from flask_restful import Api, Resource, reqparse
 from flask import request
 import database_functions
 import time
+from dotenv import load_dotenv
+import os
+
+secret = os.getenv('SECRET')
+database_url = os.getenv('POSTGRES_URL')
 
 hosted_url = 'https://chat-app-joqt.onrender.com'
 
@@ -25,7 +30,7 @@ def create_app():
 
 app = Flask(__name__, static_folder=build_file_path,
             static_url_path='/')
-app.config['SECRET_KEY'] = "thisisthesecretkey"
+app.config['SECRET_KEY'] = secret
 
 database_functions.create_tables()
 # database_functions.add_channel('charlie', 'Coffee')

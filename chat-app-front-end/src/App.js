@@ -37,6 +37,7 @@ function App() {
 
   // console.log('APP.JS RENDERED')
   
+
   if(logInStatus === true){
     return (
       <MainPage UsersOnline={dummyUsersOnline} messageFeed={messageFeed} setMessageFeed={setMessageFeed} setLoginStatus={setLoginStatus} activeUsers={activeUsers} setActiveUsers={setActiveUsers} serverURL={serverURL} channels={channels} setChannels={setChannels} channelId={channelId} /> 

@@ -6,18 +6,6 @@ import hosted_database_connection
 
 
 access_database = hosted_database_connection.access_database
-# CODE BELOW FOR LOCAL POSTGRES CONNECTION ONLY
-# def access_database():
-#     createddate = datetime.datetime.today()
-
-#     conn = psycopg2.connect(
-#         host="localhost",
-#         database="chat_app",
-#         user='charlie',
-#         password='password')
-
-#     cur = conn.cursor()
-#     return [cur, conn, createddate]
 
 
 def disconnect_from_database(cur, conn):
