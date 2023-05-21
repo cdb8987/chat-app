@@ -194,7 +194,9 @@ function MainPage(props){
 
     }
 
-    const handleClick = () => {
+    const handleClick = (selection) => {
+        if(selection==='DirectMessage' && DMIsSelected){return}
+        if(selection==='channel' && feedIsSelected){return}
         console.log(feedIsSelected, DMIsSelected)
         setFeedIsSelected(!feedIsSelected);
         setDMIsSelected(!DMIsSelected)
@@ -209,8 +211,8 @@ function MainPage(props){
                     <div className="userbar" style={{flexBasis: '33.33%', borderRightColor: 'black', borderRightStyle: 'solid'}}>
                         <div style={{textAlign: 'center', height: '10%', marginTop: '10px'}}>
                             
-                            <button className={feedButtonClassName} onClick={()=> {handleClick(); sessionStorage.setItem('MessageTypeSelection', 'channel'); sessionStorage.setItem('LeftContainerComponentSelect', 'Channels')}}>Feed</button>
-                            <button className={DMButtonClassName} onClick={()=> {handleClick();sessionStorage.setItem('MessageTypeSelection', 'DirectMessage'); sessionStorage.setItem('LeftContainerComponentSelect', 'Conversations')}}>Direct Messages</button>
+                            <button className={feedButtonClassName} onClick={()=> {handleClick('channel'); sessionStorage.setItem('MessageTypeSelection', 'channel'); sessionStorage.setItem('LeftContainerComponentSelect', 'Channels')}}>Feed</button>
+                            <button className={DMButtonClassName} onClick={()=> {handleClick('DirectMessage');sessionStorage.setItem('MessageTypeSelection', 'DirectMessage'); sessionStorage.setItem('LeftContainerComponentSelect', 'Conversations')}}>Direct Messages</button>
                         </div>
                         {LeftContainerComponent}
                         <UserData activeUsers={props.activeUsers} logOut={logOut}/>

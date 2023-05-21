@@ -35,6 +35,7 @@ token_blacklist = []
 times_messages_requested = 0
 times_users_requested = 0
 
+
 dummyMessageData = [
     {'id': 1,
      'username': 'Andy S',
@@ -153,8 +154,12 @@ def index():
 @token_required
 def retrieve_messages():
     # print(request.headers)
+    request_type = request.args.get('requestType')
     message_type = request.args.get('MessageType')
     # print("message_type is:", message_type)
+
+    if request_type == 'longpoll':
+        pass
 
     try:
         if message_type == 'channel':
@@ -231,7 +236,7 @@ def write_message(message_type='channel'):
 
             database_functions.add_message(
                 username, messagetext, message_type=message_type, recipient_username=recipient_username)
-
+            most_recent_message_update = time.time()
         else:
             raise 'message type not specified'
 
