@@ -1,4 +1,13 @@
 function ChannelList(props){
+    if(!props.channels.length > 0){
+        return
+    }
+    if(typeof props.channels === 'undefined'){
+        return
+    }
+    
+    
+    
     return (
         <div className="Channels">
             <p className="ChannelsTitle">Channels</p>

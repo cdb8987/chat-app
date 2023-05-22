@@ -1,4 +1,10 @@
 function UserData(props){
+    if(!props.activeUsers.length > 0){
+        return
+    }
+    if(typeof props.activeUsers === 'undefined'){
+        return
+    }
     
     
     let userData = props.activeUsers ? (

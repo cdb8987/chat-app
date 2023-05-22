@@ -1,4 +1,14 @@
 function MessageFeed(props){
+    if(!props.messageFeed.length > 0){
+        return
+    }
+    if(typeof props.messageFeed === 'undefined'){
+        return
+    }
+    if(!props.messageFeed[0].name){
+        return
+    }
+
     let TitleContent;
     TitleContent = (sessionStorage.getItem('LeftContainerComponentSelect')==='Channels') ?`#${sessionStorage.getItem('ChannelName')}` : `Message History`
 

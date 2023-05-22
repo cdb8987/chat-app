@@ -12,6 +12,8 @@ function App() {
   const serverURL = 'https://chat-app-sdp2.onrender.com'
   
 
+  
+
   let startingLogInStatus = false
 
   try{

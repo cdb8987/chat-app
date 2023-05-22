@@ -94,7 +94,7 @@ def login(is_unittest=False):
         else:
             submitted_username = request.headers.get('Username')
             submitted_password = request.headers.get('Password')
-            expiration = datetime.datetime.utcnow()+datetime.timedelta(minutes=30)
+            expiration = datetime.datetime.utcnow()+datetime.timedelta(minutes=300)
 
         if database_functions.verify_username_and_password(
                 submitted_username, submitted_password, is_unittest):
