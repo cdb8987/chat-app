@@ -104,9 +104,9 @@ function MainPage(props){
         .then(response=> response.json())
         .then((response)=> {
             console.log(response, typeof response)
-            if(!response.ok){
-                throw new Error('Error: ' + response.status + ' ' + response.statusText)
-            }
+            // if(!response.ok){
+            //     throw new Error('Error: ' + response.status + ' ' + response.statusText)
+            // }
             if(String(props.activeUsers) != String(response)){
                 props.setActiveUsers(response)
             };
