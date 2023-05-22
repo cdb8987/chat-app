@@ -9,7 +9,8 @@ function App() {
 
   const dummyUsersOnline = []
   const dummyMessageFeed = []
-  const serverURL = 'https://chat-app-sdp2.onrender.com'
+  // const serverURL = 'https://chat-app-sdp2.onrender.com'
+  const serverURL = 'http://127.0.0.1:5000'
 
   let startingLogInStatus = false
 

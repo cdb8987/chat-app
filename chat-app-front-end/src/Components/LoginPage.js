@@ -31,7 +31,7 @@ function LoginPage(props){
         .then(response => response.text())
         .then(result => JSON.parse(result))
         .then((result)=>{
-            if(result['login']=== true){props.setLoginStatus(true); sessionStorage.setItem('logInStatus', true)}
+            if(result['login']=== true){sessionStorage.setItem('logInStatus', true); props.setLoginStatus(true)}
             else{setserverReplyMessage(result['message'])}
 
         }
