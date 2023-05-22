@@ -208,7 +208,7 @@ function MainPage(props){
     return (
         <div className="page">
                 <div className="pagediv" style={{display: 'flex'}}>
-                    <div className="userbar" style={{flexBasis: '33.33%', borderRightColor: 'black', borderRightStyle: 'solid'}}>
+                    <div className="userbar" style={{flexBasis: '33.33%', borderRightColor: 'black', borderRightStyle:  'solid'}}>
                         <div style={{textAlign: 'center', height: '10%', marginTop: '10px'}}>
                             
                             <button className={feedButtonClassName} onClick={()=> {handleClick('channel'); sessionStorage.setItem('MessageTypeSelection', 'channel'); sessionStorage.setItem('LeftContainerComponentSelect', 'Channels')}}>Feed</button>
@@ -223,8 +223,8 @@ function MainPage(props){
                                 <MessageFeed messageFeed={props.messageFeed} />
                             </div>
                             
-                            <div><form novalidate><input onSubmit={handleSend} style={{width:"100%"}}value={sendMessageText} onChange={(e) => setSendMessageText(e.target.value)} required></input>
-                            </form>
+                            <div><input style={{width:"100%"}}value={sendMessageText} onChange={(e) => setSendMessageText(e.target.value)} required></input>
+                            
                                 <div style={{display: 'flex', flexWrap: 'wrap', alignContent: 'space-between'}}>
                                 <button className="btn btn-primary"  onClick={handleSend}  >Send</button>
                                 <button className='btn btn-secondary' style={{marginLeft: '350px'}}onClick={()=> {logOut()}}>Log Out</button>

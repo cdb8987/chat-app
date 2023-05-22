@@ -33,7 +33,7 @@ app = Flask(__name__, static_folder=build_file_path,
 app.config['SECRET_KEY'] = secret
 
 database_functions.create_tables()
-# database_functions.add_channel('charlie', 'Coffee')
+
 
 generated_tokens_log = []
 token_blacklist = []
@@ -314,6 +314,3 @@ def retrieve_channels():
 
     except:
         print('retrieve_messages function FAILED')
-
-
-# app.run(debug=True)
