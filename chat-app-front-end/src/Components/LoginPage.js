@@ -63,10 +63,6 @@ function LoginPage(props){
                     <p> Password:  <input type="password" id="password" name="password" 
                     value={password} onChange={(e) => setPassword(e.target.value)} required/></p>
                     <ReEnterPassword displayReEnterPassword={displayReEnterPassword} setDisplayReEnterPassword={setDisplayReEnterPassword} reenterPassword={reenterPassword} setReenterPassword={setReenterPassword}/>
-                    
-                    {/* <p className='Reenterpassword'> Re-Enter:  <input type="password" id="reenterpassword" name="reenterpassword" 
-                    value={reenterPassword} onChange={(e) => setReenterPassword(e.target.value)} required/></p> */}
-
                     <div style={{display: 'flex', justifyContent: 'center', alignItems:'center'}}>
                         <button className="btn btn-primary" onClick={()=>{handleSubmit(username, password, 'Login');setUsername('');setPassword('')}}>LOG IN</button>
                         <p style={{paddingTop: '15px', paddingLeft: '20px', paddingRight: '20px'}}>   OR   </p>

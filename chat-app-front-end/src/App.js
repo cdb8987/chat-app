@@ -11,34 +11,27 @@ function App() {
   const dummyMessageFeed = []
   const serverURL = 'https://chat-app-sdp2.onrender.com'
   
-
   
-
+  
   let startingLogInStatus = false
 
   try{
     if(Boolean(sessionStorage.getItem('logInStatus')) === true){
-      // console.log(typeof sessionStorage.getItem('logInStatus'), sessionStorage.getItem('logInStatus'))
       startingLogInStatus = true
     }
-    else{console.log(typeof sessionStorage.getItem('logInStatus'), sessionStorage.getItem('logInStatus'))}
   }
   catch(error){console.log(error)}
-  
   
   let [logInStatus, setLoginStatus] = useState(startingLogInStatus)
   let [messageFeed, setMessageFeed] = useState(dummyMessageFeed)
   let [activeUsers, setActiveUsers] = useState(dummyUsersOnline)
-  let [channels, setChannels] = useState(['general', 'coding'])
+  let [channels, setChannels] = useState([])
 
   let channelId;
     if(sessionStorage.getItem('channelId')){
         channelId = sessionStorage.getItem('channelId');
       }
     else{ channelId = 1; sessionStorage.setItem('channelId', channelId)}
-  
-
-  // console.log('APP.JS RENDERED')
   
 
   if(logInStatus === true){

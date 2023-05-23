@@ -55,7 +55,6 @@ function MainPage(props){
     const retrieveUserList = ()=>{
         if(sessionStorage.getItem('userlist')){
             const storedUsers = JSON.parse(sessionStorage.getItem('userlist'))
-            // console.log(`userlist pulled from sessionstorage is a ${typeof storedUsers}with value`, storedUsers)
             return (
                 <div className="Conversations">
                     <p className="ConversationsTitle">Conversations</p>
@@ -74,7 +73,6 @@ function MainPage(props){
         .then(response=> response.json())
         .then((response)=> {
             sessionStorage.setItem('userlist', JSON.stringify(response));
-            // console.log(`userlist pulled from fetch request is a ${typeof response}with value`, response)
             return response
             
         })
@@ -103,20 +101,14 @@ function MainPage(props){
         fetch(`${props.serverURL}/onlineusers`)
         .then(response=> response.json())
         .then((response)=> {
-            console.log(response, typeof response)
-            // if(!response.ok){
-            //     throw new Error('Error: ' + response.status + ' ' + response.statusText)
-            // }
             if(String(props.activeUsers) != String(response)){
                 props.setActiveUsers(response)
             };
             if(props.activeUsers.length === 0 ){
-                props.setLoginStatus(false)
             }
             
         })
         .catch((error)=> {sessionStorage.setItem('logInStatus', false); 
-        console.log(error);
         return error})
     }
     const updateMessageFeed = ()=>{
@@ -149,7 +141,6 @@ function MainPage(props){
 
     const writeMessage = (MessageText)=>{
         const myHeaders = new Headers();
-        console.log("MessageType", MessageTypeSelection)
         myHeaders.append("MessageText", MessageText);
         myHeaders.append("ChannelId", props.channelId)
         myHeaders.append("MessageType", MessageTypeSelection)
@@ -201,7 +192,6 @@ function MainPage(props){
     const handleClick = (selection) => {
         if(selection==='DirectMessage' && DMIsSelected){return}
         if(selection==='channel' && feedIsSelected){return}
-        console.log(feedIsSelected, DMIsSelected)
         setFeedIsSelected(!feedIsSelected);
         setDMIsSelected(!DMIsSelected)
       }

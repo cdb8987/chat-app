@@ -9,15 +9,10 @@ function MessageFeed(props){
         return
     }
 
-    let TitleContent;
-    TitleContent = (sessionStorage.getItem('LeftContainerComponentSelect')==='Channels') ?`#${sessionStorage.getItem('ChannelName')}` : `Message History`
-
     const userName = document.cookie.split('; ').find(row => row.startsWith('username=')).split('=')[1];
     
     let MessageData = (
         <div>
-            {/* <p className="MessageFeedTitle">{TitleContent}</p> */}
-            
                 {props.messageFeed.map(item=> (item.name===userName)?(
                 <div className="sentMessage"><strong>{item.name}</strong> {String(item.time).replace('GMT', '')}   
                 <div className="sentMessageText">
@@ -25,7 +20,7 @@ function MessageFeed(props){
                     </div>
                 </div>
                 ): (
-                    <div className="receivedMessage"><strong>{item.name}</strong> {String(item.time).replace('GMT', '')}   
+                    <div className="receivedMessage"><strong>{item.name}</strong> {String(item.time).replace('GMT',     '')}   
                     <div className="receivedMessageText">
                         <p >{item.message}</p>
                         </div>

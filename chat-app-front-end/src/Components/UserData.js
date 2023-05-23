@@ -21,7 +21,6 @@ function UserData(props){
         </div>
     ) : null;
 
-        // console.log(userData)
     return (
         <div> {userData}
                         </div>)
